@@ -4,218 +4,298 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Mon Planning">
-<meta name="theme-color" content="#F4F6FC">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='28' fill='%235B51F7'/><rect x='20' y='26' width='80' height='10' rx='5' fill='white' opacity='.95'/><rect x='20' y='44' width='58' height='8' rx='4' fill='white' opacity='.7'/><rect x='20' y='60' width='68' height='8' rx='4' fill='white' opacity='.7'/><rect x='20' y='76' width='48' height='8' rx='4' fill='white' opacity='.7'/><rect x='20' y='92' width='36' height='8' rx='4' fill='white' opacity='.5'/></svg>">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Planning">
+<meta name="theme-color" content="#070C1A">
+<link rel="manifest" href="manifest.json">
 <title>Mon Planning</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none}
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 :root{
-  --bg:#F4F6FC;--bg2:#FFFFFF;--bg3:#F0F2FA;--bg4:#E6E9F6;--bg5:#D6DBF0;
-  --t1:#0F1729;--t2:#5C6A8A;--t3:#96A0BC;
-  --bdr:rgba(15,23,41,.08);--bdr2:rgba(15,23,41,.14);
-  --acc:#5B51F7;--acc2:rgba(91,81,247,.1);--acc3:rgba(91,81,247,.06);
-  --cab:#1E6FB5;--per:#0E7A5F;--ia:#5B51F7;
-  --spt:#C47D0A;--rut:#6B7280;--lec:#B04A26;--soc:#B03668;
-  --q1:#CC3B3B;--q2:#0E7A5F;--q3:#C47D0A;--q4:#6B7280;
-  --sh:0 1px 4px rgba(15,23,41,.07),0 4px 16px rgba(15,23,41,.06);
-  --sh2:0 8px 40px rgba(15,23,41,.14);
-  --r:16px;--r2:12px;--r3:10px;
+  --bg:#070C1A;
+  --g1:rgba(255,255,255,.058);--g2:rgba(255,255,255,.1);--g3:rgba(255,255,255,.04);
+  --t1:#EEF1FF;--t2:#7B87A8;--t3:#3E4A68;
+  --bdr:rgba(255,255,255,.09);--bdr2:rgba(255,255,255,.15);
+  --acc:#4A6CF7;--acc2:rgba(74,108,247,.18);--acc3:rgba(74,108,247,.08);
+  --gold:#C8A45A;--gold2:rgba(200,164,90,.15);
+  --cab:#5B9EF5;--per:#34D1A0;--ia:#A78BFA;
+  --spt:#FBBF24;--rut:#94A3B8;--lec:#FB7748;--soc:#F472B6;
+  --q1:#F16363;--q2:#34D1A0;--q3:#FBBF24;--q4:#94A3B8;
+  --r:20px;--r2:14px;--r3:40px;
   --safe-t:env(safe-area-inset-top);--safe-b:env(safe-area-inset-bottom);
+  --sh:0 4px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.07);
+  --sh2:0 12px 48px rgba(0,0,0,.55);
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
   font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
-#app{display:flex;flex-direction:column;height:100%;padding-top:var(--safe-t);overflow:hidden}
+
+/* BACKGROUND ORBS */
+body::before{content:'';position:fixed;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(74,108,247,.13) 0%,transparent 70%);
+  top:-160px;right:-120px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,164,90,.09) 0%,transparent 70%);
+  bottom:60px;left:-120px;pointer-events:none;z-index:0}
+
+#app{display:flex;flex-direction:column;height:100%;padding-top:var(--safe-t);overflow:hidden;position:relative;z-index:1}
+
+/* GLASS MIXIN */
+.glass{background:var(--g1);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--bdr);border-radius:var(--r)}
 
 /* HEADER */
-.hdr{padding:16px 20px 4px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between}
-.hdr-left .h1{font-size:26px;font-weight:700;letter-spacing:-.5px;color:var(--t1)}
-.hdr-left .h2{font-size:13px;color:var(--t2);margin-top:2px;font-weight:400}
-.hdr-btn{width:36px;height:36px;border-radius:50%;background:var(--bg3);border:1px solid var(--bdr);
-  color:var(--t2);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:2px;flex-shrink:0}
+.hdr{padding:18px 22px 6px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between}
+.hdr-l .h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:700;
+  letter-spacing:-.3px;background:linear-gradient(135deg,#EEF1FF 30%,#C8A45A);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
+.hdr-l .h2{font-size:12px;color:var(--t2);margin-top:4px;font-weight:400;letter-spacing:.3px;text-transform:uppercase}
+.hdr-btn{width:38px;height:38px;border-radius:50%;background:var(--g1);border:1px solid var(--bdr);
+  color:var(--t2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin-top:2px;transition:.15s}
+.hdr-btn:active{background:var(--g2)}
 
 /* DAY SELECTOR */
-.ds-wrap{display:flex;gap:6px;padding:8px 20px 12px;overflow-x:auto;flex-shrink:0;
+.ds-wrap{display:flex;gap:8px;padding:8px 22px 14px;overflow-x:auto;flex-shrink:0;
   scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .ds-wrap::-webkit-scrollbar{display:none}
-.dp{min-width:46px;height:62px;border-radius:14px;background:var(--bg3);
-  border:1.5px solid transparent;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:0;cursor:pointer;flex-shrink:0;transition:.15s}
-.dp.today{border-color:var(--acc)}
-.dp.active{background:var(--acc);border-color:transparent}
-.dp .dn{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
-.dp .dd{font-size:18px;font-weight:700;color:var(--t1);margin-top:1px}
+.dp{min-width:52px;height:70px;border-radius:18px;background:var(--g1);
+  border:1px solid var(--bdr);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:1px;cursor:pointer;flex-shrink:0;transition:.2s;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.dp.today{border-color:rgba(200,164,90,.45);box-shadow:0 0 16px rgba(200,164,90,.12)}
+.dp.active{background:linear-gradient(145deg,#4A6CF7,#7C3AED);border-color:transparent;
+  box-shadow:0 6px 24px rgba(74,108,247,.45)}
+.dp .dn{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.7px}
+.dp .dd{font-size:20px;font-weight:700;color:var(--t1);margin-top:1px}
 .dp .dot{width:4px;height:4px;border-radius:50%;background:transparent;margin-top:3px}
 .dp.has-t .dot{background:var(--acc)}
 .dp.active .dn,.dp.active .dd{color:#fff}
-.dp.active .dot{background:rgba(255,255,255,.55)}
-.dp.today:not(.active) .dn,.dp.today:not(.active) .dd{color:var(--acc)}
+.dp.active .dot{background:rgba(255,255,255,.6)}
+.dp.today:not(.active) .dn,.dp.today:not(.active) .dd{color:var(--gold)}
 
 /* CONTENT */
-.content{flex:1;overflow-y:auto;padding:0 16px 100px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.content{flex:1;overflow-y:auto;padding:0 16px 110px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .content::-webkit-scrollbar{display:none}
 
-/* TASK CARD */
-.tlist{display:flex;flex-direction:column;gap:8px;padding-top:2px}
-.tc{background:var(--bg2);border-radius:var(--r);padding:14px 15px;border-left:4px solid;
-  cursor:pointer;transition:.12s;box-shadow:var(--sh)}
-.tc:active{transform:scale(.975);box-shadow:none}
-.tc-t{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:3px;line-height:1.35}
-.tc-time{font-size:12px;color:var(--t2);font-weight:500}
-.tc-meta{display:flex;align-items:center;gap:6px;margin-top:9px;flex-wrap:wrap}
-.badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}
+/* TASK CARDS */
+.tlist{display:flex;flex-direction:column;gap:10px;padding-top:4px}
+.tc{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:var(--r);
+  padding:16px 18px;border-left:3px solid;border-right:1px solid var(--bdr);
+  border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);
+  cursor:pointer;transition:.14s;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.tc:active{transform:scale(.975);opacity:.85}
+.tc-t{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:4px;line-height:1.35}
+.tc-time{font-size:12px;color:var(--t2);font-weight:500;letter-spacing:.2px}
+.tc-meta{display:flex;align-items:center;gap:7px;margin-top:10px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:700;padding:3px 11px;border-radius:var(--r3);
+  text-transform:uppercase;letter-spacing:.4px}
 .rbadge{font-size:11px;color:var(--t2);font-weight:500}
 .mbadge{font-size:11px;font-weight:600}
 
 /* EMPTY STATE */
-.empty{text-align:center;padding:60px 20px;color:var(--t3)}
-.empty .ei{font-size:42px;margin-bottom:14px}
-.empty p{font-size:15px;line-height:1.6;color:var(--t2)}
+.empty{text-align:center;padding:70px 20px}
+.empty .ei{font-size:44px;margin-bottom:16px;opacity:.7}
+.empty .et{font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:600;color:var(--t1);margin-bottom:8px}
+.empty .es{font-size:14px;color:var(--t2);line-height:1.6}
 
 /* BOTTOM NAV */
 .bnav{position:fixed;bottom:0;left:0;right:0;display:flex;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-top:1px solid var(--bdr);padding-bottom:var(--safe-b);z-index:90}
+  background:rgba(7,12,26,.88);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border-top:1px solid rgba(255,255,255,.08);padding-bottom:var(--safe-b);z-index:90}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:10px 0;cursor:pointer;color:var(--t3);gap:3px;border:none;background:none;font-family:inherit;transition:.15s}
+  padding:10px 0;cursor:pointer;color:var(--t3);gap:3px;border:none;background:none;
+  font-family:'Inter',sans-serif;transition:.2s}
 .ni.active{color:var(--acc)}
-.ni-ico{font-size:21px;line-height:1}
-.ni-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.ni-ico{font-size:22px;line-height:1}
+.ni-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px}
 
 /* FAB */
-.fab{position:fixed;right:20px;width:54px;height:54px;border-radius:50%;
-  background:var(--acc);border:none;color:#fff;font-size:26px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(91,81,247,.4),0 1px 4px rgba(91,81,247,.2);z-index:91;transition:.15s}
-.fab:active{transform:scale(.88);box-shadow:0 2px 8px rgba(91,81,247,.35)}
+.fab{position:fixed;right:22px;width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(145deg,var(--gold),#A8802A);border:none;color:#fff;
+  font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 28px rgba(200,164,90,.5),0 2px 8px rgba(200,164,90,.3);
+  z-index:91;transition:.15s;color:#1A1200}
+.fab:active{transform:scale(.88)}
 
 /* OVERLAY + SHEET */
-.ovl{position:fixed;inset:0;background:rgba(15,23,41,.4);z-index:200;opacity:0;
-  pointer-events:none;transition:.22s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.ovl{position:fixed;inset:0;background:rgba(4,8,20,.75);z-index:200;opacity:0;
+  pointer-events:none;transition:.22s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .ovl.show{opacity:1;pointer-events:all}
-.sheet{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-radius:22px 22px 0 0;
-  z-index:201;transform:translateY(102%);transition:.32s cubic-bezier(.32,0,.16,1);
-  max-height:93vh;overflow-y:auto;padding-bottom:calc(var(--safe-b)+10px);scrollbar-width:none;
-  box-shadow:0 -8px 40px rgba(15,23,41,.12)}
+.sheet{position:fixed;bottom:0;left:0;right:0;
+  background:linear-gradient(180deg,#0E1528 0%,#0A1020 100%);
+  border-radius:24px 24px 0 0;z-index:201;transform:translateY(102%);
+  transition:.34s cubic-bezier(.32,0,.16,1);max-height:93vh;overflow-y:auto;
+  padding-bottom:calc(var(--safe-b)+12px);scrollbar-width:none;
+  box-shadow:0 -12px 48px rgba(0,0,0,.6);border-top:1px solid rgba(255,255,255,.1)}
 .sheet::-webkit-scrollbar{display:none}
 .sheet.show{transform:translateY(0)}
-.sh-hdl{width:36px;height:4px;border-radius:2px;background:var(--bg4);margin:12px auto 0;display:block}
-.sh-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 6px}
-.sh-tit{font-size:18px;font-weight:700;color:var(--t1)}
-.sh-x{width:30px;height:30px;border-radius:50%;background:var(--bg3);border:1px solid var(--bdr);
-  color:var(--t2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.sh-body{padding:4px 20px 12px}
+.sh-hdl{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);margin:14px auto 0;display:block}
+.sh-row{display:flex;align-items:center;justify-content:space-between;padding:16px 22px 6px}
+.sh-tit{font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:700;
+  background:linear-gradient(135deg,#EEF1FF,#C8A45A);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text}
+.sh-x{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);color:var(--t2);font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center}
+.sh-body{padding:6px 22px 14px}
 
-/* FORM ELEMENTS */
-.fg{margin-bottom:15px}
-.fl{font-size:11px;font-weight:700;color:var(--t3);margin-bottom:7px;display:block;
-  text-transform:uppercase;letter-spacing:.7px}
-.fi{width:100%;background:var(--bg3);border:1.5px solid var(--bdr2);border-radius:var(--r2);
-  padding:13px 15px;font-size:16px;color:var(--t1);outline:none;-webkit-appearance:none;
-  font-family:inherit;-webkit-user-select:auto;user-select:auto;transition:.15s}
-.fi:focus{border-color:var(--acc);background:var(--bg2)}
-input[type=time].fi{color-scheme:light}
+/* FORM */
+.fg{margin-bottom:16px}
+.fl{font-size:10px;font-weight:700;color:var(--t3);margin-bottom:8px;display:block;
+  text-transform:uppercase;letter-spacing:.9px}
+.fi{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:14px 16px;font-size:16px;color:var(--t1);outline:none;
+  -webkit-appearance:none;font-family:'Inter',sans-serif;-webkit-user-select:auto;
+  user-select:auto;transition:.2s;caret-color:var(--gold)}
+.fi:focus{border-color:rgba(74,108,247,.6);background:rgba(255,255,255,.09);
+  box-shadow:0 0 0 3px rgba(74,108,247,.15)}
+.fi::placeholder{color:var(--t3)}
+input[type=time].fi{color-scheme:dark}
+input[type=date].fi{color-scheme:dark}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sub-lbl{font-size:11px;color:var(--t3);margin-bottom:5px;font-weight:600}
+.sub-lbl{font-size:10px;color:var(--t3);margin-bottom:6px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.7px}
 
 /* GRIDS */
-.cat-g{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.cat-btn{padding:9px 4px;border-radius:var(--r3);border:2px solid transparent;background:var(--bg3);
-  font-size:10px;font-weight:700;cursor:pointer;text-align:center;transition:.12s;
-  text-transform:uppercase;letter-spacing:.3px;line-height:1.3;font-family:inherit;color:var(--t2)}
-.cat-btn.on{border-color:currentColor}
 .day-g{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.day-btn{padding:10px 4px;border-radius:var(--r3);border:1.5px solid var(--bdr2);background:var(--bg3);
-  font-size:12px;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);font-family:inherit;transition:.12s}
-.day-btn.on{border-color:var(--acc);color:var(--acc);background:var(--acc2)}
-.rem-row{display:flex;gap:7px;flex-wrap:wrap}
-.rem-btn{padding:8px 13px;border-radius:20px;border:1.5px solid var(--bdr2);background:var(--bg3);
-  font-size:13px;color:var(--t2);cursor:pointer;font-family:inherit;transition:.12s}
+.day-btn{padding:11px 4px;border-radius:14px;border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);font-size:12px;font-weight:600;cursor:pointer;
+  text-align:center;color:var(--t2);font-family:'Inter',sans-serif;transition:.14s}
+.day-btn.on{border-color:var(--acc);color:#fff;background:rgba(74,108,247,.25)}
+.cat-g{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.cat-btn{padding:9px 4px;border-radius:12px;border:2px solid transparent;
+  background:rgba(255,255,255,.05);font-size:10px;font-weight:700;cursor:pointer;
+  text-align:center;transition:.14s;text-transform:uppercase;letter-spacing:.3px;
+  line-height:1.3;font-family:'Inter',sans-serif;color:var(--t2)}
+.cat-btn.on{border-color:currentColor;background:rgba(255,255,255,.08)}
+.rem-row{display:flex;gap:8px;flex-wrap:wrap}
+.rem-btn{padding:9px 14px;border-radius:var(--r3);border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);font-size:13px;color:var(--t2);cursor:pointer;
+  font-family:'Inter',sans-serif;transition:.14s}
 .rem-btn.on{border-color:var(--acc);color:var(--acc);background:var(--acc2)}
 .q-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.q-btn{padding:11px 8px;border-radius:var(--r2);border:2px solid var(--bdr2);cursor:pointer;
-  text-align:center;background:var(--bg3);font-family:inherit;transition:.12s}
-.q-btn .ql{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
-.q-btn .qs{font-size:10px;margin-top:2px;opacity:.72}
+.q-btn{padding:12px 10px;border-radius:16px;border:2px solid rgba(255,255,255,.08);
+  cursor:pointer;text-align:center;background:rgba(255,255,255,.04);
+  font-family:'Inter',sans-serif;transition:.14s}
+.q-btn .ql{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.q-btn .qs{font-size:10px;margin-top:3px;opacity:.7}
 .q-btn.on{border-width:2px}
 .days-g{display:flex;gap:6px;flex-wrap:wrap}
-.days-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--bdr2);background:var(--bg3);
-  font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--t2);display:flex;align-items:center;justify-content:center;transition:.12s}
+.days-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);font-size:12px;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;color:var(--t2);display:flex;align-items:center;
+  justify-content:center;transition:.14s}
 .days-btn.on{border-color:var(--acc);background:var(--acc2);color:var(--acc)}
+.tog-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0 12px}
+.tog-lbl{font-size:14px;font-weight:500;color:var(--t1)}
+.tog{width:50px;height:28px;border-radius:14px;background:rgba(255,255,255,.1);
+  border:none;cursor:pointer;position:relative;transition:.22s;flex-shrink:0}
+.tog.on{background:var(--acc)}
+.tog::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;
+  background:#fff;top:3px;left:3px;transition:.22s;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.tog.on::after{left:25px}
+
+/* REM MODE TABS */
+.mode-tabs{display:flex;gap:0;background:rgba(255,255,255,.06);border-radius:12px;
+  padding:3px;margin-bottom:14px;border:1px solid rgba(255,255,255,.08)}
+.mode-tab{flex:1;padding:9px;border-radius:10px;border:none;background:transparent;
+  color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:.15s}
+.mode-tab.on{background:var(--acc);color:#fff;box-shadow:0 3px 12px rgba(74,108,247,.4)}
+
+/* VIB OPTION */
+.vib-row{display:flex;gap:8px;margin-top:8px}
+.vib-btn{flex:1;padding:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);font-size:13px;color:var(--t2);cursor:pointer;
+  font-family:'Inter',sans-serif;text-align:center;font-weight:600;transition:.14s}
+.vib-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(200,164,90,.12)}
 
 /* BUTTONS */
-.btn-p{width:100%;padding:15px;border-radius:var(--r2);background:var(--acc);color:#fff;
-  font-size:16px;font-weight:700;border:none;cursor:pointer;margin-top:8px;font-family:inherit;
-  box-shadow:0 4px 14px rgba(91,81,247,.25);transition:.15s}
-.btn-p:active{opacity:.85;transform:scale(.98)}
-.btn-d{width:100%;padding:14px;border-radius:var(--r2);background:rgba(204,59,59,.08);color:var(--q1);
-  font-size:15px;font-weight:700;border:1px solid rgba(204,59,59,.22);cursor:pointer;margin-top:10px;font-family:inherit}
-.btn-s{width:100%;padding:14px;border-radius:var(--r2);background:var(--bg3);color:var(--t2);
-  font-size:15px;font-weight:600;border:1.5px solid var(--bdr2);cursor:pointer;margin-top:10px;font-family:inherit}
-.divl{height:1px;background:var(--bdr);margin:14px 0}
-.info-row{display:flex;align-items:center;gap:8px;padding:11px 14px;background:var(--bg3);
-  border-radius:var(--r3);margin-bottom:2px;border:1px solid var(--bdr)}
-.info-row span{font-size:13px;color:var(--t2);flex:1;line-height:1.45}
+.btn-p{width:100%;padding:16px;border-radius:16px;
+  background:linear-gradient(135deg,#4A6CF7,#7C3AED);color:#fff;
+  font-size:16px;font-weight:700;border:none;cursor:pointer;margin-top:10px;
+  font-family:'Inter',sans-serif;box-shadow:0 6px 22px rgba(74,108,247,.4);transition:.15s}
+.btn-p:active{opacity:.82;transform:scale(.98)}
+.btn-d{width:100%;padding:14px;border-radius:16px;background:rgba(241,99,99,.1);
+  color:var(--q1);font-size:15px;font-weight:700;border:1px solid rgba(241,99,99,.25);
+  cursor:pointer;margin-top:10px;font-family:'Inter',sans-serif}
+.btn-s{width:100%;padding:14px;border-radius:16px;background:rgba(255,255,255,.06);
+  color:var(--t2);font-size:15px;font-weight:600;border:1.5px solid rgba(255,255,255,.1);
+  cursor:pointer;margin-top:10px;font-family:'Inter',sans-serif}
+.divl{height:1px;background:rgba(255,255,255,.07);margin:16px 0}
+.info-box{display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:rgba(255,255,255,.05);border-radius:14px;border:1px solid rgba(255,255,255,.08)}
+.info-box span{font-size:13px;color:var(--t2);flex:1;line-height:1.5}
+
+/* REM PANEL */
+.rem-panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;padding:16px;margin-top:4px}
 
 /* EISENHOWER */
-.mat-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:100px}
+.mat-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:110px}
 .mat-wrap::-webkit-scrollbar{display:none}
-.mat-g{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:4px 14px 4px}
-.quad{border-radius:var(--r);padding:13px 12px;background:var(--bg2);
-  box-shadow:var(--sh);border-top:3px solid;display:flex;flex-direction:column;gap:7px;min-height:160px}
-.q-hd{margin-bottom:2px}
-.q-nm{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-.q-lbl{font-size:12px;font-weight:600;margin-top:1px;line-height:1.3;color:var(--t1)}
-.q-hint{font-size:10px;color:var(--t2);margin-top:1px}
-.qt{background:var(--bg3);border-radius:9px;padding:9px 10px;font-size:13px;
-  font-weight:500;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;
-  gap:5px;transition:.12s;line-height:1.35;border:1px solid var(--bdr)}
-.qt:active{transform:scale(.96)}
+.mat-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 16px}
+.quad{border-radius:22px;padding:16px 14px;backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);border:1px solid var(--bdr);
+  display:flex;flex-direction:column;gap:8px;min-height:175px;
+  box-shadow:0 4px 24px rgba(0,0,0,.35)}
+.q-hd{margin-bottom:3px}
+.q-nm{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.q-lbl{font-family:'Cormorant Garamond',Georgia,serif;font-size:14px;font-weight:700;
+  margin-top:2px;line-height:1.25;color:var(--t1)}
+.q-hint{font-size:10px;color:var(--t2);margin-top:2px;letter-spacing:.2px}
+.qt{background:rgba(0,0,0,.2);border-radius:12px;padding:9px 11px;font-size:13px;
+  font-weight:500;cursor:pointer;display:flex;align-items:flex-start;
+  justify-content:space-between;gap:5px;transition:.14s;line-height:1.35;
+  border:1px solid rgba(255,255,255,.06)}
+.qt:active{transform:scale(.95)}
 .qt-tx{flex:1;color:var(--t1)}
-.qt-ic{font-size:11px;flex-shrink:0;color:var(--t3);display:flex;gap:3px}
-.q-add{background:var(--bg3);border-radius:9px;padding:8px 10px;font-size:12px;
-  color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:5px;
-  border:1.5px dashed var(--bdr2);margin-top:2px;font-weight:500}
+.qt-ic{font-size:11px;flex-shrink:0;color:var(--t3);display:flex;gap:3px;margin-top:1px}
+.q-add{background:transparent;border-radius:12px;padding:8px 11px;font-size:12px;
+  color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:6px;
+  border:1.5px dashed rgba(255,255,255,.1);margin-top:2px;font-weight:500;transition:.14s}
+.q-add:active{background:rgba(255,255,255,.05)}
 
 /* BRAIN HACKING */
-.brain-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:100px}
+.brain-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:110px}
 .brain-wrap::-webkit-scrollbar{display:none}
-.brain-content{padding:0 16px 8px}
-.section-hdr{font-size:13px;font-weight:700;color:var(--t3);text-transform:uppercase;
-  letter-spacing:.7px;padding:16px 0 8px;display:flex;align-items:center;gap:8px}
-.hk-card{background:var(--bg2);border-radius:var(--r);margin-bottom:8px;
-  box-shadow:var(--sh);overflow:hidden;border:1px solid var(--bdr);cursor:pointer}
-.hk-top{display:flex;align-items:center;gap:12px;padding:14px 16px}
-.hk-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;flex-shrink:0}
+.brain-body{padding:4px 16px 8px}
+.sec-lbl{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;
+  letter-spacing:.9px;padding:16px 2px 10px;display:flex;align-items:center;gap:8px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
+.hk-card{background:var(--g1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-radius:20px;margin-bottom:9px;border:1px solid var(--bdr);
+  box-shadow:0 2px 16px rgba(0,0,0,.25);overflow:hidden;cursor:pointer}
+.hk-top{display:flex;align-items:center;gap:13px;padding:15px 18px}
+.hk-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
 .hk-info{flex:1}
 .hk-title{font-size:14px;font-weight:600;color:var(--t1);line-height:1.3}
-.hk-ctx{font-size:11px;color:var(--t3);margin-top:2px}
-.hk-arr{font-size:18px;color:var(--t3);flex-shrink:0;transition:.2s;line-height:1}
-.hk-body{padding:0 16px 14px;display:none}
+.hk-ctx{font-size:10px;color:var(--t3);margin-top:2px;letter-spacing:.3px;text-transform:uppercase;font-weight:600}
+.hk-arr{font-size:18px;color:var(--t3);flex-shrink:0;transition:.22s;line-height:1;font-weight:300}
+.hk-body{padding:0 18px 16px;display:none}
 .hk-body.open{display:block}
-.hk-desc{font-size:13px;color:var(--t2);line-height:1.65}
-.hk-tag{display:inline-block;font-size:10px;font-weight:700;padding:4px 10px;
-  border-radius:20px;margin-top:10px;text-transform:uppercase;letter-spacing:.4px}
-.diag-card{border-radius:var(--r);padding:14px 16px;margin-bottom:8px;border-left:4px solid}
-.diag-card .dc-t{font-size:14px;font-weight:700;margin-bottom:5px}
-.diag-card .dc-b{font-size:13px;line-height:1.6}
+.hk-sep{height:1px;background:rgba(255,255,255,.07);margin-bottom:14px}
+.hk-desc{font-size:13px;color:var(--t2);line-height:1.7}
+.hk-tag{display:inline-block;font-size:10px;font-weight:700;padding:5px 12px;
+  border-radius:var(--r3);margin-top:12px;text-transform:uppercase;letter-spacing:.5px}
+.diag{border-radius:20px;padding:16px 18px;margin-bottom:9px;border-left:3px solid;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--bdr);border-right:1px solid var(--bdr);border-bottom:1px solid var(--bdr)}
+.diag-t{font-size:14px;font-weight:700;margin-bottom:7px;line-height:1.35}
+.diag-b{font-size:13px;color:var(--t2);line-height:1.68}
 
 /* TOAST */
-.toast{position:fixed;top:calc(var(--safe-t) + 10px);left:12px;right:12px;
-  background:var(--t1);border-radius:var(--r2);padding:13px 16px;z-index:500;
-  transform:translateY(-130%);transition:.3s cubic-bezier(.32,0,.16,1);
-  box-shadow:var(--sh2)}
+.toast{position:fixed;top:calc(var(--safe-t) + 12px);left:14px;right:14px;
+  background:rgba(14,21,40,.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-radius:18px;padding:14px 18px;z-index:500;transform:translateY(-135%);
+  transition:.32s cubic-bezier(.32,0,.16,1);box-shadow:var(--sh2);
+  border:1px solid rgba(255,255,255,.12)}
 .toast.show{transform:translateY(0)}
-.t-tit{font-size:14px;font-weight:700;color:#fff}
-.t-bdy{font-size:13px;color:rgba(255,255,255,.7);margin-top:2px}
-
-/* SECTION TITLE */
-.s-hdr{display:flex;align-items:center;gap:8px;padding:4px 0 12px}
-.s-hdr .s-t{font-size:20px;font-weight:700;color:var(--t1)}
-.s-hdr .s-sub{font-size:13px;color:var(--t2);margin-left:auto;font-weight:500}
+.t-tit{font-size:14px;font-weight:700;color:var(--t1)}
+.t-bdy{font-size:13px;color:var(--t2);margin-top:3px}
 </style>
 </head>
 <body>
@@ -224,154 +304,160 @@ input[type=time].fi{color-scheme:light}
 <button class="fab" id="fab" onclick="onFab()">＋</button>
 <div class="ovl" id="ovl" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet"><span class="sh-hdl"></span><div id="sh-in"></div></div>
-
 <script>
-/* ══════════════════════════════════════════════════════════
-   CONSTANTS
-══════════════════════════════════════════════════════════ */
+/* ══ CONSTANTS ══════════════════════════════════════════════════════════════ */
 const DS=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 const DL=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 const CATS={
-  cabinet:{l:'Cabinet',   c:'#1E6FB5',bg:'rgba(30,111,181,.08)'},
-  perso:  {l:'Clientèle', c:'#0E7A5F',bg:'rgba(14,122,95,.08)'},
-  ia:     {l:'Bus. IA',   c:'#5B51F7',bg:'rgba(91,81,247,.08)'},
-  sport:  {l:'Sport',     c:'#C47D0A',bg:'rgba(196,125,10,.08)'},
-  routine:{l:'Routine',   c:'#6B7280',bg:'rgba(107,114,128,.08)'},
-  lecture:{l:'Lecture',   c:'#B04A26',bg:'rgba(176,74,38,.08)'},
-  social: {l:'Social',    c:'#B03668',bg:'rgba(176,54,104,.08)'},
+  cabinet:{l:'Cabinet',  c:'#5B9EF5',bg:'rgba(91,158,245,.1)'},
+  perso:  {l:'Clientèle',c:'#34D1A0',bg:'rgba(52,209,160,.1)'},
+  ia:     {l:'Bus. IA',  c:'#A78BFA',bg:'rgba(167,139,250,.1)'},
+  sport:  {l:'Sport',    c:'#FBBF24',bg:'rgba(251,191,36,.1)'},
+  routine:{l:'Routine',  c:'#94A3B8',bg:'rgba(148,163,184,.08)'},
+  lecture:{l:'Lecture',  c:'#FB7748',bg:'rgba(251,119,72,.1)'},
+  social: {l:'Social',   c:'#F472B6',bg:'rgba(244,114,182,.1)'},
 };
 const QD={
-  1:{l:'Urgent & Important',s:'Faire maintenant',c:'#CC3B3B',e:'🔴'},
-  2:{l:'Important',         s:'Planifier',       c:'#0E7A5F',e:'🟢'},
-  3:{l:'Urgent',            s:'Déléguer',         c:'#C47D0A',e:'🟡'},
-  4:{l:'Ni urgent ni imp.', s:'Éliminer',         c:'#6B7280',e:'⚫'},
+  1:{l:'Urgent & Important',s:'Faire maintenant',c:'#F16363',bg:'rgba(241,99,99,.1)',e:'🔴'},
+  2:{l:'Important',         s:'Planifier',       c:'#34D1A0',bg:'rgba(52,209,160,.1)',e:'🟢'},
+  3:{l:'Urgent',            s:'Déléguer',         c:'#FBBF24',bg:'rgba(251,191,36,.1)',e:'🟡'},
+  4:{l:'Ni urgent ni imp.', s:'Éliminer',         c:'#94A3B8',bg:'rgba(148,163,184,.1)',e:'⚫'},
 };
-const BRAIN_HACKS=[
-  {n:1,title:'CAR — Cortisol Awakening Response',ctx:'Huberman Lab, 2021',col:'#5B51F7',tag:'Appliquer 08h20 chaque matin',
-   desc:'Le cortisol atteint son pic dans les 30–45 min après le réveil : c\'est ta fenêtre de concentration maximale. Le bloc 08h20–09h20 doit contenir ta tâche la plus difficile — jamais les emails, jamais le cabinet. C\'est là que se construit ton patrimoine professionnel, pas ailleurs. Ajouter 2 à 10 min de lumière naturelle au réveil amplifie cet effet.'},
-  {n:2,title:'Implementation intentions',ctx:'Gollwitzer, 1999',col:'#0E7A5F',tag:'Pour chaque séance de sport',
-   desc:'"Je vais aller à la salle" → 20% de réussite. "Si je sors du cabinet à 18h, alors je vais directement à la salle sans passer chez moi" → 60–70% de réussite. Cette formulation SI–ALORS réduit le taux d\'abandon de plus de 50% selon les études. Le passage par chez soi est l\'ennemi n°1 du sport du soir.'},
-  {n:3,title:'Temptation bundling',ctx:'Milkman, Wharton 2014',col:'#C47D0A',tag:'Sport + anglais en simultané',
-   desc:'Écouter des podcasts EN ANGLAIS uniquement pendant le sport ou le trajet. Tu couples une contrainte (sport) avec un contenu stimulant, et tu fais de l\'anglais simultanément. Double gain, zéro temps supplémentaire. Suggestions : "How I Built This", "My First Million", "Acquired".'},
-  {n:4,title:'Single tasking obligatoire',ctx:'Rubinstein, Meyer & Evans, 2001',col:'#1E6FB5',tag:'Blocs IA et clientèle perso',
-   desc:'Le cerveau ne fait pas de multitâche : il switche et perd 15 à 20% d\'efficacité à chaque transition. Pendant un bloc IA ou clientèle perso : fermer tous les onglets hors projet, mode avion, timer 90 min, UNE seule tâche écrite avant de commencer. Pas "réfléchir à la stratégie" : une sortie tangible par session.'},
-  {n:5,title:'La règle du démarrage ridicule',ctx:'Fogg, Tiny Habits',col:'#B04A26',tag:'Quand la motivation est basse',
-   desc:'Quand tu bloques, ne négocie pas la séance complète. Engage-toi uniquement sur : 5 min de sport, 5 lignes de lecture, 1 message prospect, 3 min de méditation. Dans 80% des cas tu continues. Dans 20%, tu as quand même protégé l\'habitude. Le cerveau adore les portes d\'entrée minuscules parce qu\'il est manipulable.'},
-  {n:6,title:'Pré-engagement la veille',ctx:'Behaviour design',col:'#0E7A5F',tag:'Chaque soir avant de dormir',
-   desc:'Chaque soir : sac de sport préparé, tenue posée, livre anglais sur l\'oreiller, 3 priorités du lendemain écrites, 1er message prospect en brouillon. Le matin, tu n\'as plus à décider. Décider fatigue (ego depletion). Exécuter enrichit. Chaque décision éliminée le soir est une unité d\'énergie cognitive disponible demain matin.'},
-  {n:7,title:'Don\'t break the chain',ctx:'Méthode Seinfeld',col:'#5B51F7',tag:'Sport, lecture, méditation',
-   desc:'Calendrier mensuel papier visible dans ta chambre ou ton bureau. Chaque jour où tu complètes sport + lecture + méditation : grande croix rouge. L\'objectif devient de ne pas briser la chaîne. Le support physique est prouvé plus efficace que les apps de tracking pour l\'ancrage des habitudes sur 3 à 6 mois.'},
-  {n:8,title:'Scoreboard quotidien — 80%, pas 100%',ctx:'GTD + recherche sur la performance',col:'#C47D0A',tag:'6 cases à cocher chaque jour',
-   desc:'Suivre 6 cases/jour : sommeil (6h30 min), méditation (10 min), lecture anglais (30 min), sport (selon planning), clientèle perso (1 action min), IA (mar/ven/sam/dim). Objectif : 80% minimum, pas 100%. Le perfectionnisme à 100% transforme les ambitieux en paralysés. 80% répété 50 semaines bat 100% répété 4 semaines.'},
-  {n:9,title:'Friction engineering',ctx:'Behaviour design, Thaler',col:'#B03668',tag:'Modifier l\'environnement ce soir',
-   desc:'Rendre les bonnes habitudes physiquement plus faciles, les mauvaises plus difficiles. Téléphone chargé dans une autre pièce (pas au lit). Sac de sport à la porte. Livre sur la table. Réseaux sociaux hors de l\'écran d\'accueil. Chaque obstacle supprimé augmente la probabilité d\'un bon comportement de 20 à 40%.'},
-  {n:10,title:'Pre-commitment + accountability',ctx:'Ariely, Kahneman — théorie des perspectives',col:'#1E6FB5',tag:'Objectif clientèle perso',
-   desc:'La pression de perte est 2x plus motivante que le gain attendu. Annonce à 3 contacts un objectif mesurable (X clients perso d\'ici 6 mois). Conviens d\'un check mensuel avec un pair. La possibilité de perte sociale crée une pression continue que la motivation intrinsèque seule ne peut pas égaler sur la durée.'},
+const HACKS=[
+  {n:1,title:'CAR — Cortisol Awakening Response',ctx:'Huberman Lab · 2021',c:'#A78BFA',
+   tag:'Appliquer 08h20 chaque matin',
+   desc:'Le cortisol atteint son pic dans les 30–45 min post-réveil : c\'est ta fenêtre de concentration maximale. Le bloc 08h20–09h20 doit toujours contenir ta tâche la plus difficile — jamais les emails, jamais le cabinet. 2 à 10 min de lumière naturelle au réveil amplifient cet effet en calibrant l\'horloge circadienne.'},
+  {n:2,title:'Implementation intentions',ctx:'Gollwitzer · 1999',c:'#34D1A0',
+   tag:'Protocole SI–ALORS pour chaque sport',
+   desc:'"Je vais aller à la salle" → 20% de réussite. "Si je sors du cabinet à 18h, alors je vais directement à la salle sans passer chez moi" → 60–70%. Cette formulation réduit le taux d\'abandon de plus de 50%. Le passage par chez soi est l\'ennemi n°1 du sport du soir.'},
+  {n:3,title:'Temptation bundling',ctx:'Milkman · Wharton 2014',c:'#FBBF24',
+   tag:'Podcasts EN uniquement pendant le sport',
+   desc:'Lier une contrainte (sport) à un plaisir (contenu stimulant) augmente la probabilité d\'exécution. Podcasts anglais exclusivement au sport ou en trajet : "How I Built This", "My First Million", "Acquired". Double gain — sport et anglais — zéro temps supplémentaire.'},
+  {n:4,title:'Single tasking obligatoire',ctx:'Rubinstein, Meyer & Evans · 2001',c:'#5B9EF5',
+   tag:'Blocs IA et clientèle perso',
+   desc:'Le cerveau ne multitâche pas : il switche et perd 15–20% d\'efficacité à chaque transition. Pendant un bloc IA ou clientèle : mode avion, tous les onglets fermés sauf un, timer 90 min, une seule sortie tangible définie avant de commencer.'},
+  {n:5,title:'Règle du démarrage ridicule',ctx:'Fogg · Tiny Habits',c:'#FB7748',
+   tag:'Quand la motivation est absente',
+   desc:'Ne jamais négocier la séance complète quand tu bloques. Engage-toi seulement sur : 5 min de sport, 5 lignes de lecture, 1 message prospect, 3 min de méditation. Dans 80% des cas tu continues. Dans 20%, tu as protégé l\'habitude. Le cerveau adore les portes d\'entrée minuscules.'},
+  {n:6,title:'Pré-engagement la veille',ctx:'Behaviour design',c:'#34D1A0',
+   tag:'Rituel de fin de journée',
+   desc:'Chaque soir : sac de sport à la porte, tenue posée, livre sur l\'oreiller, 3 priorités du lendemain écrites, 1er message prospect en brouillon. Le matin, tu n\'as plus à décider. Décider fatigue (ego depletion). Exécuter enrichit.'},
+  {n:7,title:'Don\'t break the chain',ctx:'Méthode Seinfeld',c:'#A78BFA',
+   tag:'Calendrier papier visible',
+   desc:'Calendrier mensuel physique dans un endroit visible. Chaque jour complété (sport + lecture + méditation) : grande croix rouge. L\'objectif devient de ne pas briser la chaîne. Le support physique est plus efficace que les apps de tracking pour l\'ancrage à 3–6 mois.'},
+  {n:8,title:'Scoreboard 80%, pas 100%',ctx:'GTD + Performance research',c:'#FBBF24',
+   tag:'6 cases par jour, 80% suffisent',
+   desc:'6 cases/jour : sommeil (6h30 min), méditation (10 min), lecture EN (30 min), sport (planning), clientèle perso (1 action min), IA (mar/ven/sam/dim). Objectif : 80% minimum. Le perfectionnisme à 100% transforme les ambitieux en paralysés. 80% répété 50 semaines bat 100% répété 4 semaines.'},
+  {n:9,title:'Friction engineering',ctx:'Thaler · Behaviour design',c:'#F472B6',
+   tag:'Modifier l\'environnement physique',
+   desc:'Rendre les bonnes habitudes plus faciles, les mauvaises plus difficiles. Téléphone chargé hors chambre. Sac de sport à la porte. Réseaux sociaux hors écran d\'accueil. Chaque obstacle supprimé augmente la probabilité d\'un comportement optimal de 20 à 40%.'},
+  {n:10,title:'Pre-commitment + accountability',ctx:'Ariely · Kahneman',c:'#5B9EF5',
+   tag:'Objectif clientèle perso public',
+   desc:'La pression de perte est 2× plus motivante que le gain attendu (théorie des perspectives). Annonce à 3 contacts un objectif mesurable (X clients perso d\'ici 6 mois). Conviens d\'un check mensuel avec un pair. La pression sociale externe est plus durable que la motivation intrinsèque seule.'},
 ];
-const DIAGNOSTIC=[
-  {col:'#CC3B3B',bg:'rgba(204,59,59,.07)',icon:'⚠️',title:'Point déontologique — Priorité absolue',
-   body:'Avant d\'exécuter quoi que ce soit : relire ton contrat et clarifier ton statut. Si collaborateur libéral (RIN art. 14.3) → clientèle perso autorisée, sans contrepartie financière au cabinet, mais interdit d\'intervenir contre les intérêts des clients du cabinet. Si collaborateur salarié (RIN art. 14.4) → développement de clientèle interdit pendant l\'exécution du contrat. C\'est la première heure à investir cette semaine.'},
-  {col:'#CC3B3B',bg:'rgba(204,59,59,.07)',icon:'⛔',title:'Projet IA — Le flou est le risque n°1',
-   body:'"Plusieurs idées sans être complètement fixé" est l\'état dans lequel 90% des projets meurent. 2h par soir sans direction = énergie dispersée + abandon à 3 mois. Semaine 1 : 5 idées → choisir 1 hypothèse. Semaine 2 : 10 entretiens marché. Semaine 3 : landing page + offre simple. Semaine 4 : 1 prévente ou 3 lettres d\'intention. Sans ça, le projet reste un fantasme technologique.'},
-  {col:'#C47D0A',bg:'rgba(196,125,10,.07)',icon:'⚡',title:'Le sport n\'est pas une variable d\'ajustement',
-   body:'La première semaine où tu sacrifies la salle "parce qu\'un dossier est urgent", le cycle se brise. La recherche sur les performers à haute intensité montre que l\'exercice régulier est le principal prédicteur de la performance cognitive soutenue sur 12–18 mois. Ton corps est l\'outil de production, pas un accessoire.'},
-  {col:'#C47D0A',bg:'rgba(196,125,10,.07)',icon:'📡',title:'Clientèle perso — Machine d\'acquisition nécessaire',
-   body:'Les déjeuners réseau ont un cycle de conversion de 6 à 18 mois. LinkedIn + automation Zapier/Claude est ton levier prioritaire pour 2025–2026. Chaque semaine sans contenu publié est une semaine où un confrère te passe devant sur Google et LinkedIn. Les KPIs hebdomadaires (10 reprises de contact, 5 nouveaux contacts, 1 publication) ne sont pas optionnels.'},
-  {col:'#C47D0A',bg:'rgba(196,125,10,.07)',icon:'🧠',title:'Situation sentimentale — Bande passante cognitive',
-   body:'L\'hésitation entre l\'ex et d\'autres personnes consomme de l\'énergie mentale même quand tu "travailles". La rumination active le réseau par défaut et réduit la capacité préfrontale. Ce n\'est pas un jugement moral : c\'est neurologique. Prendre une décision claire — quelle qu\'elle soit — libère immédiatement de la bande passante pour tes objectifs.'},
-  {col:'#0E7A5F',bg:'rgba(14,122,95,.07)',icon:'✅',title:'Ce qui est bien calibré — À préserver absolument',
-   body:'Le bloc de deep work 08h20–09h20 avant le cabinet est ta meilleure décision. La plupart des collaborateurs senior donnent ce temps aux emails. Toi tu investis 1h chaque matin dans ton propre patrimoine professionnel. Sur 5 ans, c\'est cette asymétrie qui fait la différence. Ne laisse jamais le cabinet empiéter sur ce bloc, quelles que soient les pressions.'},
+const DIAG=[
+  {c:'#F16363',bg:'rgba(241,99,99,.1)',i:'⚠️',t:'Point déontologique — Priorité absolue avant tout',
+   b:'Relire ton contrat et clarifier ton statut avant toute action. Si collaborateur libéral (RIN art. 14.3) → clientèle perso autorisée, sans contrepartie au cabinet. Si collaborateur salarié (RIN art. 14.4) → interdit pendant l\'exécution du contrat. C\'est la première heure à investir cette semaine, pas la rédaction d\'un post LinkedIn.'},
+  {c:'#F16363',bg:'rgba(241,99,99,.1)',i:'⛔',t:'Projet IA — Le flou est le risque n°1',
+   b:'"Plusieurs idées sans être fixé" = état dans lequel 90% des projets meurent. Semaine 1 : 5 idées → 1 hypothèse. Sem. 2 : 10 entretiens marché. Sem. 3 : landing page + offre. Sem. 4 : 1 prévente ou 3 lettres d\'intention. Sans cette séquence, le projet reste un fantasme technologique.'},
+  {c:'#FBBF24',bg:'rgba(251,191,36,.08)',i:'⚡',t:'Le sport n\'est pas une variable d\'ajustement',
+   b:'La première semaine où tu sacrifies la salle "parce qu\'un dossier est urgent", le cycle se brise et ne se rétablit pas facilement. La recherche sur les performers à haute intensité montre que l\'exercice régulier est le principal prédicteur de la performance cognitive soutenue sur 12–18 mois.'},
+  {c:'#FBBF24',bg:'rgba(251,191,36,.08)',i:'📡',t:'Clientèle perso — Machine d\'acquisition nécessaire',
+   b:'Les déjeuners réseau ont un cycle de conversion de 6 à 18 mois. LinkedIn + automation Zapier/Claude est ton levier prioritaire. Chaque semaine sans contenu publié est une semaine où un confrère te passe devant. Les KPIs (10 reprises/sem, 5 contacts, 1 publication) ne sont pas optionnels.'},
+  {c:'#FBBF24',bg:'rgba(251,191,36,.08)',i:'🧠',t:'Situation sentimentale — Coût cognitif réel',
+   b:'L\'hésitation entre l\'ex et d\'autres personnes consomme de la bande passante mentale même quand tu "travailles". La rumination active le réseau par défaut et réduit la capacité préfrontale. Prendre une décision claire libère immédiatement des ressources pour tes objectifs.'},
+  {c:'#34D1A0',bg:'rgba(52,209,160,.08)',i:'✅',t:'Ce qui est bien calibré — À protéger absolument',
+   b:'Le bloc deep work 08h20–09h20 avant le cabinet est ta meilleure décision. La plupart des collaborateurs senior donnent ce temps aux emails. Sur 5 ans, cette asymétrie de 1h/jour investie dans ton propre patrimoine professionnel est la décision qui fait la différence. Ne laisse jamais le cabinet l\'empiéter.'},
 ];
 
-/* ══════════════════════════════════════════════════════════
-   DEFAULT DATA
-══════════════════════════════════════════════════════════ */
+/* ══ DEFAULT DATA ════════════════════════════════════════════════════════════ */
 const DEF=[
-  {id:'a01',t:'Réveil + méditation',d:0,s:'07:30',e:'07:50',c:'routine',r:null,mid:null},
-  {id:'a02',t:'Routine matinale + lumière',d:0,s:'07:50',e:'08:20',c:'routine',r:null,mid:null},
-  {id:'a03',t:'Deep work — Clientèle perso',d:0,s:'08:20',e:'09:20',c:'perso',r:15,mid:null},
-  {id:'a04',t:'Cabinet — Dossiers prioritaires',d:0,s:'09:30',e:'13:00',c:'cabinet',r:null,mid:null},
-  {id:'a05',t:'Déjeuner réseau / prospect',d:0,s:'13:00',e:'14:00',c:'perso',r:10,mid:null},
-  {id:'a06',t:'Cabinet — Réunions + rédaction',d:0,s:'14:00',e:'18:00',c:'cabinet',r:null,mid:null},
-  {id:'a07',t:'Fitness (1h30)',d:0,s:'18:30',e:'20:00',c:'sport',r:30,mid:null},
-  {id:'a08',t:'Business IA',d:0,s:'20:30',e:'22:30',c:'ia',r:15,mid:null},
-  {id:'a09',t:'Lecture anglais',d:0,s:'22:30',e:'23:00',c:'lecture',r:null,mid:null},
-  {id:'b01',t:'Réveil + méditation',d:1,s:'07:30',e:'07:50',c:'routine',r:null,mid:null},
-  {id:'b02',t:'Deep work — Clientèle / rédaction',d:1,s:'08:20',e:'09:20',c:'perso',r:15,mid:null},
-  {id:'b03',t:'Cabinet',d:1,s:'09:30',e:'13:00',c:'cabinet',r:null,mid:null},
-  {id:'b04',t:'Déjeuner réseau',d:1,s:'13:00',e:'14:00',c:'perso',r:null,mid:null},
-  {id:'b05',t:'Cabinet',d:1,s:'14:00',e:'18:00',c:'cabinet',r:null,mid:null},
-  {id:'b06',t:'Boxe (1h30)',d:1,s:'18:30',e:'20:00',c:'sport',r:30,mid:null},
-  {id:'b07',t:'Business IA — Validation',d:1,s:'20:30',e:'22:30',c:'ia',r:null,mid:null},
-  {id:'b08',t:'Lecture anglais',d:1,s:'22:30',e:'23:00',c:'lecture',r:null,mid:null},
-  {id:'c01',t:'Réveil + méditation',d:2,s:'07:30',e:'07:50',c:'routine',r:null,mid:null},
-  {id:'c02',t:'Deep work — Clientèle perso',d:2,s:'08:20',e:'09:20',c:'perso',r:15,mid:null},
-  {id:'c03',t:'Cabinet',d:2,s:'09:30',e:'13:00',c:'cabinet',r:null,mid:null},
-  {id:'c04',t:'Déjeuner',d:2,s:'13:00',e:'14:00',c:'routine',r:null,mid:null},
-  {id:'c05',t:'Cabinet',d:2,s:'14:00',e:'18:30',c:'cabinet',r:null,mid:null},
-  {id:'c06',t:'Sortie — Amis / Social',d:2,s:'19:30',e:'23:00',c:'social',r:null,mid:null},
-  {id:'d01',t:'Réveil + méditation',d:3,s:'08:15',e:'08:35',c:'routine',r:null,mid:null},
-  {id:'d02',t:'Lecture anglais — Rattrapage',d:3,s:'08:35',e:'09:15',c:'lecture',r:null,mid:null},
-  {id:'d03',t:'Cabinet',d:3,s:'09:45',e:'13:00',c:'cabinet',r:null,mid:null},
-  {id:'d04',t:'Déjeuner',d:3,s:'13:00',e:'14:00',c:'routine',r:null,mid:null},
-  {id:'d05',t:'Cabinet',d:3,s:'14:00',e:'19:30',c:'cabinet',r:null,mid:null},
-  {id:'d06',t:'Clientèle perso — Contenu / RDV',d:3,s:'20:00',e:'21:30',c:'perso',r:15,mid:null},
-  {id:'d07',t:'Lecture anglais',d:3,s:'22:30',e:'23:00',c:'lecture',r:null,mid:null},
-  {id:'e01',t:'Réveil + méditation',d:4,s:'07:30',e:'07:50',c:'routine',r:null,mid:null},
-  {id:'e02',t:'Revue semaine + clientèle perso',d:4,s:'08:20',e:'09:20',c:'perso',r:null,mid:null},
-  {id:'e03',t:'Cabinet',d:4,s:'09:30',e:'13:00',c:'cabinet',r:null,mid:null},
-  {id:'e04',t:'Déjeuner réseau',d:4,s:'13:00',e:'14:00',c:'perso',r:null,mid:null},
-  {id:'e05',t:'Cabinet',d:4,s:'14:00',e:'18:30',c:'cabinet',r:null,mid:null},
-  {id:'e06',t:'Course à pied (45 min)',d:4,s:'18:45',e:'19:30',c:'sport',r:30,mid:null},
-  {id:'e07',t:'Bloc stratégique — Pipeline + IA',d:4,s:'20:30',e:'22:30',c:'ia',r:null,mid:null},
-  {id:'e08',t:'Lecture anglais',d:4,s:'22:30',e:'23:00',c:'lecture',r:null,mid:null},
-  {id:'f01',t:'Réveil calme + méditation',d:5,s:'08:30',e:'09:00',c:'routine',r:null,mid:null},
-  {id:'f02',t:'Lecture anglais',d:5,s:'09:00',e:'09:30',c:'lecture',r:null,mid:null},
-  {id:'f03',t:'Fitness (1h30)',d:5,s:'10:00',e:'11:30',c:'sport',r:30,mid:null},
-  {id:'f04',t:'Clientèle perso — Contenu / offres',d:5,s:'12:00',e:'13:30',c:'perso',r:null,mid:null},
-  {id:'f05',t:'Déjeuner',d:5,s:'13:30',e:'14:30',c:'routine',r:null,mid:null},
-  {id:'f06',t:'Business IA — Sprint produit (3h)',d:5,s:'14:30',e:'17:30',c:'ia',r:15,mid:null},
-  {id:'f07',t:'Admin perso + finances',d:5,s:'18:00',e:'19:00',c:'routine',r:null,mid:null},
-  {id:'g01',t:'Réveil + méditation étendue',d:6,s:'09:00',e:'09:30',c:'routine',r:null,mid:null},
-  {id:'g02',t:'Lecture anglais',d:6,s:'10:00',e:'10:30',c:'lecture',r:null,mid:null},
-  {id:'g03',t:'Boxe (1h30)',d:6,s:'11:00',e:'12:30',c:'sport',r:30,mid:null},
-  {id:'g04',t:'Clientèle perso — Fond / prépa RDV',d:6,s:'14:00',e:'16:00',c:'perso',r:null,mid:null},
-  {id:'g05',t:'Weekly Review + Planning semaine',d:6,s:'16:30',e:'18:00',c:'ia',r:60,mid:null},
-  {id:'g06',t:'Préparation semaine',d:6,s:'20:00',e:'21:00',c:'routine',r:null,mid:null},
+  {id:'a01',t:'Réveil + méditation',d:0,s:'07:30',e:'07:50',c:'routine',r:null,rv:true,mid:null},
+  {id:'a02',t:'Routine matinale + lumière',d:0,s:'07:50',e:'08:20',c:'routine',r:null,rv:true,mid:null},
+  {id:'a03',t:'Deep work — Clientèle perso',d:0,s:'08:20',e:'09:20',c:'perso',r:15,rv:true,mid:null},
+  {id:'a04',t:'Cabinet — Dossiers prioritaires',d:0,s:'09:30',e:'13:00',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'a05',t:'Déjeuner réseau / prospect',d:0,s:'13:00',e:'14:00',c:'perso',r:10,rv:false,mid:null},
+  {id:'a06',t:'Cabinet — Réunions + rédaction',d:0,s:'14:00',e:'18:00',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'a07',t:'Fitness (1h30)',d:0,s:'18:30',e:'20:00',c:'sport',r:30,rv:true,mid:null},
+  {id:'a08',t:'Business IA',d:0,s:'20:30',e:'22:30',c:'ia',r:15,rv:true,mid:null},
+  {id:'a09',t:'Lecture anglais',d:0,s:'22:30',e:'23:00',c:'lecture',r:null,rv:true,mid:null},
+  {id:'b01',t:'Réveil + méditation',d:1,s:'07:30',e:'07:50',c:'routine',r:null,rv:true,mid:null},
+  {id:'b02',t:'Deep work — Clientèle / rédaction',d:1,s:'08:20',e:'09:20',c:'perso',r:15,rv:true,mid:null},
+  {id:'b03',t:'Cabinet',d:1,s:'09:30',e:'13:00',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'b04',t:'Déjeuner réseau',d:1,s:'13:00',e:'14:00',c:'perso',r:null,rv:true,mid:null},
+  {id:'b05',t:'Cabinet',d:1,s:'14:00',e:'18:00',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'b06',t:'Boxe (1h30)',d:1,s:'18:30',e:'20:00',c:'sport',r:30,rv:true,mid:null},
+  {id:'b07',t:'Business IA — Validation',d:1,s:'20:30',e:'22:30',c:'ia',r:null,rv:true,mid:null},
+  {id:'b08',t:'Lecture anglais',d:1,s:'22:30',e:'23:00',c:'lecture',r:null,rv:true,mid:null},
+  {id:'c01',t:'Réveil + méditation',d:2,s:'07:30',e:'07:50',c:'routine',r:null,rv:true,mid:null},
+  {id:'c02',t:'Deep work — Clientèle perso',d:2,s:'08:20',e:'09:20',c:'perso',r:15,rv:true,mid:null},
+  {id:'c03',t:'Cabinet',d:2,s:'09:30',e:'13:00',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'c04',t:'Déjeuner',d:2,s:'13:00',e:'14:00',c:'routine',r:null,rv:true,mid:null},
+  {id:'c05',t:'Cabinet',d:2,s:'14:00',e:'18:30',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'c06',t:'Sortie — Amis / Social',d:2,s:'19:30',e:'23:00',c:'social',r:null,rv:false,mid:null},
+  {id:'d01',t:'Réveil + méditation',d:3,s:'08:15',e:'08:35',c:'routine',r:null,rv:true,mid:null},
+  {id:'d02',t:'Lecture anglais — Rattrapage',d:3,s:'08:35',e:'09:15',c:'lecture',r:null,rv:true,mid:null},
+  {id:'d03',t:'Cabinet',d:3,s:'09:45',e:'13:00',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'d04',t:'Déjeuner',d:3,s:'13:00',e:'14:00',c:'routine',r:null,rv:true,mid:null},
+  {id:'d05',t:'Cabinet',d:3,s:'14:00',e:'19:30',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'d06',t:'Clientèle perso — Contenu / RDV',d:3,s:'20:00',e:'21:30',c:'perso',r:15,rv:true,mid:null},
+  {id:'d07',t:'Lecture anglais',d:3,s:'22:30',e:'23:00',c:'lecture',r:null,rv:true,mid:null},
+  {id:'e01',t:'Réveil + méditation',d:4,s:'07:30',e:'07:50',c:'routine',r:null,rv:true,mid:null},
+  {id:'e02',t:'Revue semaine + clientèle perso',d:4,s:'08:20',e:'09:20',c:'perso',r:null,rv:true,mid:null},
+  {id:'e03',t:'Cabinet',d:4,s:'09:30',e:'13:00',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'e04',t:'Déjeuner réseau',d:4,s:'13:00',e:'14:00',c:'perso',r:null,rv:true,mid:null},
+  {id:'e05',t:'Cabinet',d:4,s:'14:00',e:'18:30',c:'cabinet',r:null,rv:true,mid:null},
+  {id:'e06',t:'Course à pied (45 min)',d:4,s:'18:45',e:'19:30',c:'sport',r:30,rv:true,mid:null},
+  {id:'e07',t:'Bloc stratégique — Pipeline + IA',d:4,s:'20:30',e:'22:30',c:'ia',r:null,rv:true,mid:null},
+  {id:'e08',t:'Lecture anglais',d:4,s:'22:30',e:'23:00',c:'lecture',r:null,rv:true,mid:null},
+  {id:'f01',t:'Réveil calme + méditation',d:5,s:'08:30',e:'09:00',c:'routine',r:null,rv:true,mid:null},
+  {id:'f02',t:'Lecture anglais',d:5,s:'09:00',e:'09:30',c:'lecture',r:null,rv:true,mid:null},
+  {id:'f03',t:'Fitness (1h30)',d:5,s:'10:00',e:'11:30',c:'sport',r:30,rv:true,mid:null},
+  {id:'f04',t:'Clientèle perso — Contenu / offres',d:5,s:'12:00',e:'13:30',c:'perso',r:null,rv:true,mid:null},
+  {id:'f05',t:'Déjeuner',d:5,s:'13:30',e:'14:30',c:'routine',r:null,rv:true,mid:null},
+  {id:'f06',t:'Business IA — Sprint produit (3h)',d:5,s:'14:30',e:'17:30',c:'ia',r:15,rv:true,mid:null},
+  {id:'f07',t:'Admin perso + finances',d:5,s:'18:00',e:'19:00',c:'routine',r:null,rv:true,mid:null},
+  {id:'g01',t:'Réveil + méditation étendue',d:6,s:'09:00',e:'09:30',c:'routine',r:null,rv:true,mid:null},
+  {id:'g02',t:'Lecture anglais',d:6,s:'10:00',e:'10:30',c:'lecture',r:null,rv:true,mid:null},
+  {id:'g03',t:'Boxe (1h30)',d:6,s:'11:00',e:'12:30',c:'sport',r:30,rv:true,mid:null},
+  {id:'g04',t:'Clientèle perso — Fond / prépa RDV',d:6,s:'14:00',e:'16:00',c:'perso',r:null,rv:true,mid:null},
+  {id:'g05',t:'Weekly Review + Planning semaine',d:6,s:'16:30',e:'18:00',c:'ia',r:60,rv:true,mid:null},
+  {id:'g06',t:'Préparation semaine',d:6,s:'20:00',e:'21:00',c:'routine',r:null,rv:true,mid:null},
 ];
 
-/* ══════════════════════════════════════════════════════════
-   STATE & STORAGE
-══════════════════════════════════════════════════════════ */
-const st={view:'week',day:(new Date().getDay()+6)%7,tasks:[],matrix:[],timers:{}};
-const LT='pl_t4',LM='pl_m4';
+/* ══ STATE ═══════════════════════════════════════════════════════════════════ */
+const st={view:'week',day:(new Date().getDay()+6)%7,tasks:[],matrix:[]};
+const LT='pl_t5',LM='pl_m5';
 function save(){localStorage.setItem(LT,JSON.stringify(st.tasks));localStorage.setItem(LM,JSON.stringify(st.matrix));}
 function load(){
-  try{st.tasks=JSON.parse(localStorage.getItem(LT)||'null')||JSON.parse(JSON.stringify(DEF));}
-  catch(e){st.tasks=JSON.parse(JSON.stringify(DEF));}
-  try{st.matrix=JSON.parse(localStorage.getItem(LM)||'null')||[];}
-  catch(e){st.matrix=[];}
+  try{st.tasks=JSON.parse(localStorage.getItem(LT)||'null')||JSON.parse(JSON.stringify(DEF));}catch(e){st.tasks=JSON.parse(JSON.stringify(DEF));}
+  try{st.matrix=JSON.parse(localStorage.getItem(LM)||'null')||[];}catch(e){st.matrix=[];}
 }
-function uid(){return'x'+Math.random().toString(36).substr(2,9)+Date.now().toString(36);}
+function uid(){return'x'+Math.random().toString(36).substr(2,8)+Date.now().toString(36);}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-/* week dates */
 function weekDates(){
-  const today=new Date(),dow=today.getDay(),off=dow===0?-6:1-dow;
-  const mon=new Date(today);mon.setDate(today.getDate()+off);
-  return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d.getDate();});
+  const n=new Date(),dow=n.getDay(),off=dow===0?-6:1-dow;
+  const m=new Date(n);m.setDate(n.getDate()+off);
+  return Array.from({length:7},(_,i)=>{const d=new Date(m);d.setDate(m.getDate()+i);return d.getDate();});
 }
 
-/* ══════════════════════════════════════════════════════════
-   NOTIFICATIONS
-══════════════════════════════════════════════════════════ */
+/* ══ NOTIFICATIONS + SW ══════════════════════════════════════════════════════ */
+let swReg=null;
+async function initSW(){
+  if(!('serviceWorker' in navigator))return;
+  try{swReg=await navigator.serviceWorker.register('./sw.js',{scope:'./'});}catch(e){}
+}
 async function askNotif(){
   if(!('Notification' in window))return false;
   if(Notification.permission==='default')await Notification.requestPermission();
   return Notification.permission==='granted';
 }
+function sendSW(data){
+  if(!navigator.serviceWorker||!navigator.serviceWorker.controller)return;
+  navigator.serviceWorker.controller.postMessage(data);
+}
 let _tt=null;
-function toast(ttl,bdy,ms=4200){
+function toast(ttl,bdy,ms=4500){
   const el=document.getElementById('toast');
   document.getElementById('t-ttl').textContent=ttl;
   document.getElementById('t-bdy').textContent=bdy;
@@ -379,47 +465,61 @@ function toast(ttl,bdy,ms=4200){
   if(_tt)clearTimeout(_tt);
   _tt=setTimeout(()=>el.classList.remove('show'),ms);
 }
-function fireNotif(title,body){
+function fireLocal(title,body){
   toast('⏰ '+title,body);
-  if(Notification.permission==='granted'){
-    try{new Notification('⏰ '+title,{body,icon:'/favicon.ico'});}catch(e){}
+  if(Notification.permission==='granted'){try{new Notification('⏰ '+title,{body});}catch(e){}}
+}
+
+/* Compute next fireAt for a given weekday + time */
+function nextFireAt(dayOfWeek,timeStr,minsBefore=0){
+  const now=new Date(),today=(now.getDay()+6)%7;
+  let diff=(dayOfWeek-today+7)%7;
+  if(diff===0){
+    const[h,m]=timeStr.split(':').map(Number);
+    const tMs=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m).getTime()-minsBefore*60000;
+    if(tMs<=Date.now())diff=7;
   }
-  if(navigator.vibrate)navigator.vibrate([200,100,200]);
+  const tgt=new Date(now);tgt.setDate(now.getDate()+diff);
+  const[h,m]=timeStr.split(':').map(Number);
+  tgt.setHours(h,m,0,0);
+  return tgt.getTime()-minsBefore*60000;
 }
 
-/* Calendar task reminders */
-function schedTask(tk){
-  if(!tk.r)return;
-  unschedTask(tk.id);
-  const now=new Date(),tod=(now.getDay()+6)%7;
-  if(tk.d!==tod)return;
-  const[h,m]=tk.s.split(':').map(Number);
-  const tMs=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m,0,0).getTime();
-  const delay=tMs-tk.r*60000-Date.now();
-  const cat=CATS[tk.c]||CATS.routine;
-  if(delay>0)st.timers[tk.id]=setTimeout(()=>fireNotif(tk.t,`Commence dans ${tk.r} min — ${cat.l}`),delay);
-}
-function unschedTask(id){if(st.timers[id]){clearTimeout(st.timers[id]);delete st.timers[id];}}
-
-/* Matrix task reminders */
-function schedMatrix(mk){
-  if(!mk.rem||!mk.rem.time||!mk.rem.days||!mk.rem.days.length)return;
-  unschedTask('m_'+mk.id);
-  const now=new Date(),tod=(now.getDay()+6)%7;
-  if(!mk.rem.days.includes(tod))return;
-  const[h,m]=mk.rem.time.split(':').map(Number);
-  const tMs=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m,0,0).getTime();
-  const delay=tMs-Date.now();
-  if(delay>0)st.timers['m_'+mk.id]=setTimeout(()=>fireNotif(mk.t,'Rappel Eisenhower — '+QD[mk.q].l),delay);
-}
 function schedAll(){
-  st.tasks.forEach(t=>{if(t.r)schedTask(t);});
-  st.matrix.forEach(m=>{if(m.rem)schedMatrix(m);});
+  const reminders=[];
+  st.tasks.forEach(tk=>{
+    if(!tk.r)return;
+    const fireAt=nextFireAt(tk.d,tk.s,tk.r);
+    const cat=CATS[tk.c]||CATS.routine;
+    reminders.push({id:'tk_'+tk.id,title:tk.t,body:`Commence dans ${tk.r} min — ${cat.l}`,fireAt,vibrate:tk.rv!==false});
+    // Fallback local timer
+    const delay=fireAt-Date.now();
+    if(delay>0&&delay<24*3600*1000)setTimeout(()=>fireLocal(tk.t,`Commence dans ${tk.r} min`),delay);
+  });
+  st.matrix.forEach(mk=>{
+    if(!mk.rem)return;
+    const rem=mk.rem;
+    const days=rem.mode==='recurring'?(rem.days||[]):(rem.date?[-1]:[]);
+    if(rem.mode==='unique'&&rem.date&&rem.time){
+      const[y,mo,d]=rem.date.split('-').map(Number);
+      const[h,mi]=rem.time.split(':').map(Number);
+      const fireAt=new Date(y,mo-1,d,h,mi).getTime();
+      if(fireAt>Date.now())reminders.push({id:'mk_'+mk.id,title:mk.t,body:'Rappel Eisenhower — '+QD[mk.q].l,fireAt,vibrate:rem.vibrate!==false});
+    } else if(rem.mode==='recurring'&&rem.days&&rem.days.length&&rem.time){
+      rem.days.forEach((day,i)=>{
+        const fireAt=nextFireAt(day,rem.time);
+        if(fireAt>Date.now())reminders.push({id:'mk_'+mk.id+'_'+i,title:mk.t,body:'Rappel Eisenhower — '+QD[mk.q].l,fireAt,vibrate:rem.vibrate!==false});
+      });
+    }
+  });
+  if(navigator.serviceWorker&&navigator.serviceWorker.controller){
+    sendSW({type:'RESCHEDULE_ALL',reminders});
+  } else if(swReg){
+    swReg.active&&swReg.active.postMessage({type:'RESCHEDULE_ALL',reminders});
+  }
 }
 
-/* ══════════════════════════════════════════════════════════
-   RENDER
-══════════════════════════════════════════════════════════ */
+/* ══ RENDER ══════════════════════════════════════════════════════════════════ */
 function R(){
   const app=document.getElementById('app');
   if(st.view==='week')renderW(app);
@@ -427,24 +527,21 @@ function R(){
   else renderBrain(app);
   const fab=document.getElementById('fab');
   fab.style.display=st.view==='brain'?'none':'flex';
-  fab.style.bottom='calc(var(--safe-b) + 72px)';
+  fab.style.bottom='calc(var(--safe-b) + 76px)';
 }
-
-function nav(){
+function NAV(){
   return`<nav class="bnav">
     <button class="ni${st.view==='week'?' active':''}" onclick="swV('week')"><span class="ni-ico">📅</span><span class="ni-lbl">Semaine</span></button>
     <button class="ni${st.view==='matrix'?' active':''}" onclick="swV('matrix')"><span class="ni-ico">⬛</span><span class="ni-lbl">Eisenhower</span></button>
     <button class="ni${st.view==='brain'?' active':''}" onclick="swV('brain')"><span class="ni-ico">🧠</span><span class="ni-lbl">Brain</span></button>
   </nav>`;
 }
-
 function renderW(app){
-  const dates=weekDates();
-  const today=(new Date().getDay()+6)%7;
+  const dates=weekDates(),today=(new Date().getDay()+6)%7;
   const dt=st.tasks.filter(x=>x.d===st.day).sort((a,b)=>a.s.localeCompare(b.s));
   app.innerHTML=`
   <div class="hdr">
-    <div class="hdr-left"><div class="h1">Planning</div>
+    <div class="hdr-l"><div class="h1">Mon Planning</div>
       <div class="h2">${DL[st.day]} · ${dt.length} tâche${dt.length!==1?'s':''}</div></div>
     <button class="hdr-btn" onclick="doNotif()">🔔</button>
   </div>
@@ -453,105 +550,93 @@ function renderW(app){
       <span class="dn">${d}</span><span class="dd">${dates[i]}</span><span class="dot"></span>
     </div>`).join('')}</div>
   <div class="content"><div class="tlist">
-    ${dt.length===0?`<div class="empty"><div class="ei">📅</div><p>Aucune tâche ce jour.<br>Appuie sur <b style="color:var(--acc)">＋</b> pour en ajouter.</p></div>`
+    ${dt.length===0?`<div class="empty"><div class="ei">✦</div><div class="et">Aucune tâche</div><div class="es">Appuie sur le bouton doré<br>pour en ajouter une.</div></div>`
     :dt.map(t=>{
       const cat=CATS[t.c]||CATS.routine;
       const mt=t.mid?st.matrix.find(m=>m.id===t.mid):null;
       const q=mt?QD[mt.q]:null;
       return`<div class="tc" style="border-left-color:${cat.c};background:${cat.bg}" onclick="editTask('${t.id}')">
         <div class="tc-t">${esc(t.t)}</div>
-        <div class="tc-time">${t.s} → ${t.e}</div>
+        <div class="tc-time">${t.s} — ${t.e}</div>
         <div class="tc-meta">
-          <span class="badge" style="background:${cat.c}18;color:${cat.c}">${cat.l}</span>
-          ${t.r?`<span class="rbadge">🔔 −${t.r}min</span>`:''}
+          <span class="badge" style="background:${cat.c}22;color:${cat.c}">${cat.l}</span>
+          ${t.r?`<span class="rbadge">🔔 −${t.r}min${t.rv===false?' · silencieux':''}</span>`:''}
           ${mt?`<span class="mbadge" style="color:${q.c}">${q.e} Q${mt.q}</span>`:''}
         </div>
       </div>`;
     }).join('')}
-  </div></div>${nav()}`;
+  </div></div>${NAV()}`;
 }
-
 function renderM(app){
   app.innerHTML=`
   <div class="hdr">
-    <div class="hdr-left"><div class="h1">Eisenhower</div>
+    <div class="hdr-l"><div class="h1">Eisenhower</div>
       <div class="h2">Matrice de priorités</div></div>
   </div>
   <div class="mat-wrap"><div class="mat-g">
     ${[1,2,3,4].map(q=>{
       const qd=QD[q];
-      const items=st.matrix.filter(x=>x.q===q);
-      return`<div class="quad" style="border-top-color:${qd.c}">
+      return`<div class="quad" style="background:${qd.bg};border-color:${qd.c}28">
         <div class="q-hd">
           <div class="q-nm" style="color:${qd.c}">${qd.e} Q${q}</div>
           <div class="q-lbl">${qd.l}</div>
           <div class="q-hint">${qd.s}</div>
         </div>
-        ${items.map(x=>{
+        ${st.matrix.filter(x=>x.q===q).map(x=>{
           const cal=x.cid?st.tasks.find(t=>t.id===x.cid):null;
-          const hasRem=x.rem&&x.rem.time&&x.rem.days&&x.rem.days.length>0;
+          const hr=x.rem&&((x.rem.mode==='unique'&&x.rem.date)||(x.rem.mode==='recurring'&&x.rem.days&&x.rem.days.length));
           return`<div class="qt" onclick="editMatrix('${x.id}')">
             <span class="qt-tx">${esc(x.t)}</span>
-            <span class="qt-ic">${cal?'📅':''}${hasRem?'🔔':''}</span>
+            <span class="qt-ic">${cal?'📅':''}${hr?'🔔':''}</span>
           </div>`;
         }).join('')}
-        <div class="q-add" onclick="addMat(${q})"><span style="font-size:15px;color:var(--acc)">＋</span><span>Ajouter</span></div>
+        <div class="q-add" onclick="addMat(${q})"><span style="color:var(--gold);font-size:16px">＋</span><span>Ajouter</span></div>
       </div>`;
     }).join('')}
-  </div></div>${nav()}`;
+  </div></div>${NAV()}`;
 }
-
 function renderBrain(app){
   app.innerHTML=`
   <div class="hdr">
-    <div class="hdr-left"><div class="h1">Brain Hacking</div>
-      <div class="h2">Techniques & Diagnostic</div></div>
+    <div class="hdr-l"><div class="h1">Brain Hacking</div>
+      <div class="h2">Techniques · Diagnostic</div></div>
   </div>
-  <div class="brain-wrap"><div class="brain-content">
-    <div class="section-hdr">⚡ 10 Techniques de performance</div>
-    ${BRAIN_HACKS.map((h,i)=>`
-    <div class="hk-card" onclick="toggleHk(${i})">
+  <div class="brain-wrap"><div class="brain-body">
+    <div class="sec-lbl">⚡ 10 Techniques de performance</div>
+    ${HACKS.map((h,i)=>`
+    <div class="hk-card" onclick="tHk(${i})">
       <div class="hk-top">
-        <div class="hk-num" style="background:${h.col}18;color:${h.col}">${h.n}</div>
-        <div class="hk-info">
-          <div class="hk-title">${h.title}</div>
-          <div class="hk-ctx">${h.ctx}</div>
-        </div>
-        <div class="hk-arr" id="hkarr-${i}">›</div>
+        <div class="hk-num" style="background:${h.c}20;color:${h.c}">${h.n}</div>
+        <div class="hk-info"><div class="hk-title">${h.title}</div><div class="hk-ctx">${h.ctx}</div></div>
+        <div class="hk-arr" id="arr${i}">›</div>
       </div>
-      <div class="hk-body" id="hkbody-${i}">
+      <div class="hk-body" id="hkb${i}">
+        <div class="hk-sep"></div>
         <div class="hk-desc">${h.desc}</div>
-        <span class="hk-tag" style="background:${h.col}14;color:${h.col}">${h.tag}</span>
+        <span class="hk-tag" style="background:${h.c}18;color:${h.c}">${h.tag}</span>
       </div>
     </div>`).join('')}
-    <div class="section-hdr" style="margin-top:8px">🔍 Diagnostic honnête</div>
-    ${DIAGNOSTIC.map(d=>`
-    <div class="diag-card" style="background:${d.bg};border-left-color:${d.col}">
-      <div class="dc-t" style="color:${d.col}">${d.icon} ${d.title}</div>
-      <div class="dc-b" style="color:var(--t2)">${d.body}</div>
+    <div class="sec-lbl" style="margin-top:6px">🔍 Diagnostic honnête</div>
+    ${DIAG.map(d=>`
+    <div class="diag" style="background:${d.bg};border-left-color:${d.c}">
+      <div class="diag-t" style="color:${d.c}">${d.i} ${d.t}</div>
+      <div class="diag-b">${d.b}</div>
     </div>`).join('')}
-    <div style="height:16px"></div>
-  </div></div>${nav()}`;
+    <div style="height:20px"></div>
+  </div></div>${NAV()}`;
+}
+function tHk(i){
+  const b=document.getElementById('hkb'+i),a=document.getElementById('arr'+i);
+  if(!b)return;const o=b.classList.toggle('open');
+  if(a)a.style.transform=o?'rotate(90deg)':'rotate(0deg)';
 }
 
-function toggleHk(i){
-  const body=document.getElementById('hkbody-'+i);
-  const arr=document.getElementById('hkarr-'+i);
-  if(!body)return;
-  const open=body.classList.toggle('open');
-  if(arr)arr.style.transform=open?'rotate(90deg)':'';
-}
-
-/* ══════════════════════════════════════════════════════════
-   NAV
-══════════════════════════════════════════════════════════ */
+/* ══ NAV ═════════════════════════════════════════════════════════════════════ */
 function selDay(d){st.day=d;R();}
 function swV(v){st.view=v;R();}
 function onFab(){st.view==='week'?newTask():addMat(1);}
 
-/* ══════════════════════════════════════════════════════════
-   SHEET
-══════════════════════════════════════════════════════════ */
+/* ══ SHEET ═══════════════════════════════════════════════════════════════════ */
 function openSheet(html){
   document.getElementById('sh-in').innerHTML=html;
   document.getElementById('ovl').classList.add('show');
@@ -562,175 +647,154 @@ function closeSheet(){
   document.getElementById('sheet').classList.remove('show');
 }
 
-/* ══════════════════════════════════════════════════════════
-   TASK CRUD
-══════════════════════════════════════════════════════════ */
+/* ══ TASK CRUD ═══════════════════════════════════════════════════════════════ */
 let ET=null;
 function newTask(){
-  ET={id:null,t:'',d:st.day,s:'09:00',e:'10:00',c:'cabinet',r:null,mid:null,_q:0};shTask();
+  ET={id:null,t:'',d:st.day,s:'09:00',e:'10:00',c:'cabinet',r:null,rv:true,mid:null,_q:0};shTask();
 }
 function editTask(id){
   const t=st.tasks.find(x=>x.id===id);if(!t)return;
   const lm=t.mid?st.matrix.find(m=>m.id===t.mid):null;
-  ET={...t,_q:lm?lm.q:0};shTask();
+  ET={...t,rv:t.rv!==false,_q:lm?lm.q:0};shTask();
 }
 function shTask(){
   const T=ET;
   openSheet(`
-  <div class="sh-row"><span class="sh-tit">${T.id?'Modifier la tâche':'Nouvelle tâche'}</span>
+  <div class="sh-row"><span class="sh-tit">${T.id?'Modifier':'Nouvelle tâche'}</span>
     <button class="sh-x" onclick="closeSheet()">✕</button></div>
   <div class="sh-body">
-    <div class="fg">
-      <label class="fl">Titre</label>
-      <input class="fi" id="et-t" value="${esc(T.t)}" placeholder="Nom de la tâche"
-        oninput="ET.t=this.value" maxlength="80" autocomplete="off">
-    </div>
-    <div class="fg">
-      <label class="fl">Jour</label>
-      <div class="day-g">${DS.map((d,i)=>`<div class="day-btn${T.d===i?' on':''}" onclick="setTd(${i})">${d}</div>`).join('')}</div>
-    </div>
-    <div class="fg">
-      <label class="fl">Horaires</label>
+    <div class="fg"><label class="fl">Titre</label>
+      <input class="fi" id="et-t" value="${esc(T.t)}" placeholder="Nom de la tâche" oninput="ET.t=this.value" maxlength="80" autocomplete="off"></div>
+    <div class="fg"><label class="fl">Jour</label>
+      <div class="day-g">${DS.map((d,i)=>`<div class="day-btn${T.d===i?' on':''}" onclick="setTd(${i})">${d}</div>`).join('')}</div></div>
+    <div class="fg"><label class="fl">Horaires</label>
       <div class="row2">
         <div><div class="sub-lbl">Début</div><input type="time" class="fi" value="${T.s}" onchange="ET.s=this.value"></div>
         <div><div class="sub-lbl">Fin</div><input type="time" class="fi" value="${T.e}" onchange="ET.e=this.value"></div>
-      </div>
-    </div>
-    <div class="fg">
-      <label class="fl">Catégorie</label>
-      <div class="cat-g">${Object.entries(CATS).map(([k,v])=>`<div class="cat-btn${T.c===k?' on':''}" style="color:${v.c};${T.c===k?'background:'+v.bg+';border-color:'+v.c:''}" onclick="setTc('${k}')">${v.l}</div>`).join('')}</div>
-    </div>
-    <div class="fg">
-      <label class="fl">Rappel avant le début</label>
+      </div></div>
+    <div class="fg"><label class="fl">Catégorie</label>
+      <div class="cat-g">${Object.entries(CATS).map(([k,v])=>`<div class="cat-btn${T.c===k?' on':''}" style="color:${v.c};${T.c===k?'background:'+v.bg+';border-color:'+v.c:''}" onclick="setTc('${k}')">${v.l}</div>`).join('')}</div></div>
+    <div class="fg"><label class="fl">Rappel avant le début</label>
       <div class="rem-row">
         <div class="rem-btn${!T.r?' on':''}" onclick="setTr(null)">Aucun</div>
         ${[5,10,15,30,60].map(r=>`<div class="rem-btn${T.r===r?' on':''}" onclick="setTr(${r})">−${r}min</div>`).join('')}
       </div>
+      ${T.r?`<div class="vib-row" style="margin-top:10px">
+        <div class="vib-btn${T.rv!==false?' on':''}" onclick="ET.rv=true;shTask()">📳 Vibration</div>
+        <div class="vib-btn${T.rv===false?' on':''}" onclick="ET.rv=false;shTask()">🔕 Silencieux</div>
+      </div>`:''}
     </div>
-    <div class="fg">
-      <label class="fl">Ajouter à Eisenhower</label>
+    <div class="fg"><label class="fl">Ajouter à Eisenhower</label>
       <div class="q-g">
-        <div class="q-btn${T._q===0?' on':''}" style="${T._q===0?'border-color:var(--acc);background:var(--acc2)':''}" onclick="setTq(0)">
+        <div class="q-btn${T._q===0?' on':''}" style="${T._q===0?'border-color:var(--acc);background:rgba(74,108,247,.15)':''}" onclick="setTq(0)">
           <div class="ql" style="color:var(--t2)">Aucun</div></div>
-        ${[1,2,3,4].map(q=>{const qd=QD[q];return`<div class="q-btn${T._q===q?' on':''}" style="${T._q===q?'border-color:'+qd.c+';background:'+qd.c+'12':''}" onclick="setTq(${q})">
+        ${[1,2,3,4].map(q=>{const qd=QD[q];return`<div class="q-btn${T._q===q?' on':''}" style="${T._q===q?'border-color:'+qd.c+';background:'+qd.bg:''}" onclick="setTq(${q})">
           <div class="ql" style="color:${qd.c}">${qd.e} Q${q}</div>
           <div class="qs" style="color:${qd.c}">${qd.s}</div>
         </div>`;}).join('')}
-      </div>
-    </div>
+      </div></div>
     <button class="btn-p" onclick="saveTask()">Enregistrer</button>
-    ${T.id?`<button class="btn-d" onclick="delTask('${T.id}')">Supprimer la tâche</button>`:''}
+    ${T.id?`<button class="btn-d" onclick="delTask('${T.id}')">Supprimer</button>`:''}
     <button class="btn-s" onclick="closeSheet()">Annuler</button>
   </div>`);
-  setTimeout(()=>{ const el=document.getElementById('et-t'); if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length);}},350);
+  setTimeout(()=>{const el=document.getElementById('et-t');if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length);}},350);
 }
 function setTd(d){ET.d=d;shTask();}
 function setTc(c){ET.c=c;shTask();}
 function setTr(r){ET.r=r;shTask();}
 function setTq(q){ET._q=q;shTask();}
-
 function saveTask(){
-  const T=ET;
-  const el=document.getElementById('et-t');
-  if(el)T.t=el.value.trim();
-  if(!T.t){toast('Titre manquant','Ajoute un nom à la tâche.');return;}
-  const nq=T._q||0;
-  const lm=T.mid?st.matrix.find(m=>m.id===T.mid):null;
-  if(nq>0){
-    if(lm){lm.q=nq;lm.t=T.t;}
-    else{const nid=uid();st.matrix.push({id:nid,t:T.t,q:nq,cid:T.id,rem:null});T.mid=nid;}
-  }else if(nq===0&&T.mid){
-    st.matrix=st.matrix.filter(m=>m.id!==T.mid);T.mid=null;
-  }
+  const T=ET;const el=document.getElementById('et-t');if(el)T.t=el.value.trim();
+  if(!T.t){toast('Titre requis','Donne un nom à la tâche.');return;}
+  const nq=T._q||0,lm=T.mid?st.matrix.find(m=>m.id===T.mid):null;
+  if(nq>0){if(lm){lm.q=nq;lm.t=T.t;}else{const nid=uid();st.matrix.push({id:nid,t:T.t,q:nq,cid:T.id,rem:null});T.mid=nid;}}
+  else if(nq===0&&T.mid){st.matrix=st.matrix.filter(m=>m.id!==T.mid);T.mid=null;}
   const{_q,...td}=T;
-  if(td.id){
-    const i=st.tasks.findIndex(x=>x.id===td.id);
-    if(i>=0)st.tasks[i]={...td};
-    unschedTask(td.id);if(td.r)schedTask(td);
-  }else{
-    td.id=uid();
-    if(td.mid){const mt=st.matrix.find(m=>m.id===td.mid);if(mt)mt.cid=td.id;}
-    st.tasks.push(td);if(td.r)schedTask(td);
-  }
-  save();closeSheet();R();
+  if(td.id){const i=st.tasks.findIndex(x=>x.id===td.id);if(i>=0)st.tasks[i]={...td};}
+  else{td.id=uid();if(td.mid){const mt=st.matrix.find(m=>m.id===td.mid);if(mt)mt.cid=td.id;}st.tasks.push(td);}
+  save();schedAll();closeSheet();R();
 }
 function delTask(id){
   if(!confirm('Supprimer cette tâche ?'))return;
   const t=st.tasks.find(x=>x.id===id);
   if(t?.mid)st.matrix=st.matrix.filter(m=>m.id!==t.mid);
-  unschedTask(id);st.tasks=st.tasks.filter(x=>x.id!==id);
-  save();closeSheet();R();
+  st.tasks=st.tasks.filter(x=>x.id!==id);
+  save();schedAll();closeSheet();R();
 }
 
-/* ══════════════════════════════════════════════════════════
-   MATRIX CRUD
-══════════════════════════════════════════════════════════ */
+/* ══ MATRIX CRUD ═════════════════════════════════════════════════════════════ */
 let EM=null;
 function addMat(q){EM={id:null,t:'',q,cid:null,rem:null};shMat();}
-function editMatrix(id){const t=st.matrix.find(x=>x.id===id);if(!t)return;EM={...t,rem:t.rem?{...t.rem,days:[...(t.rem.days||[])]}:{null:true}};if(EM.rem&&EM.rem.null){EM.rem=null;}shMat();}
-
+function editMatrix(id){const t=st.matrix.find(x=>x.id===id);if(!t)return;EM={...t,rem:t.rem?JSON.parse(JSON.stringify(t.rem)):null};shMat();}
 function shMat(){
-  const T=EM;
+  const T=EM,rem=T.rem||{mode:'recurring',time:'09:00',days:[0,1,2,3,4],date:'',vibrate:true};
+  const hasRem=!!T.rem;const mode=rem.mode||'recurring';
   const cal=T.cid?st.tasks.find(x=>x.id===T.cid):null;
-  const rem=T.rem||{time:'09:00',days:[]};
-  const hasRem=T.rem&&T.rem.time&&T.rem.days&&T.rem.days.length>0;
   openSheet(`
   <div class="sh-row"><span class="sh-tit">${T.id?'Modifier':'Nouvelle tâche'}</span>
     <button class="sh-x" onclick="closeSheet()">✕</button></div>
   <div class="sh-body">
-    <div class="fg">
-      <label class="fl">Titre</label>
-      <input class="fi" id="em-t" value="${esc(T.t)}" placeholder="Nom de la tâche"
-        oninput="EM.t=this.value" maxlength="80" autocomplete="off">
-    </div>
-    <div class="fg">
-      <label class="fl">Quadrant</label>
-      <div class="q-g">${[1,2,3,4].map(q=>{const qd=QD[q];return`<div class="q-btn${T.q===q?' on':''}" style="${T.q===q?'border-color:'+qd.c+';background:'+qd.c+'12':''}" onclick="setMq(${q})">
+    <div class="fg"><label class="fl">Titre</label>
+      <input class="fi" id="em-t" value="${esc(T.t)}" placeholder="Nom de la tâche" oninput="EM.t=this.value" maxlength="80" autocomplete="off"></div>
+    <div class="fg"><label class="fl">Quadrant</label>
+      <div class="q-g">${[1,2,3,4].map(q=>{const qd=QD[q];return`<div class="q-btn${T.q===q?' on':''}" style="${T.q===q?'border-color:'+qd.c+';background:'+qd.bg:''}" onclick="setMq(${q})">
         <div class="ql" style="color:${qd.c}">${qd.e} Q${q}</div>
         <div class="qs" style="color:${qd.c}">${qd.l}</div>
-      </div>`;}).join('')}</div>
-    </div>
-    <div class="fg">
-      <label class="fl">Rappel récurrent</label>
-      <div style="background:var(--bg3);border-radius:var(--r2);padding:14px;border:1px solid var(--bdr)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:${hasRem?'12':'0'}px">
-          <span style="font-size:14px;font-weight:500;color:var(--t1)">Activer un rappel</span>
-          <button class="hdr-btn tog" id="rem-tog" onclick="toggleMatRem()" style="${hasRem?'background:var(--acc);color:#fff;border-color:var(--acc)':''}">${hasRem?'✓':'○'}</button>
+      </div>`;}).join('')}</div></div>
+    <div class="fg"><label class="fl">Rappel</label>
+      <div class="rem-panel">
+        <div class="tog-row">
+          <span class="tog-lbl">Activer un rappel</span>
+          <button class="tog${hasRem?' on':''}" id="rem-tog" onclick="togMatRem()"></button>
         </div>
         <div id="rem-opts" style="display:${hasRem?'block':'none'}">
-          <div class="sub-lbl" style="margin-bottom:6px">Heure</div>
-          <input type="time" class="fi" id="rem-time" value="${rem.time||'09:00'}" onchange="setMatRemTime(this.value)" style="margin-bottom:12px">
-          <div class="sub-lbl" style="margin-bottom:6px">Jours de la semaine</div>
-          <div class="days-g">
-            ${DS.map((d,i)=>`<div class="days-btn${(rem.days||[]).includes(i)?' on':''}" onclick="toggleMatDay(${i})">${d.slice(0,2)}</div>`).join('')}
+          <div class="mode-tabs" style="margin-top:4px">
+            <button class="mode-tab${mode==='unique'?' on':''}" onclick="setMatMode('unique')">🗓 Unique</button>
+            <button class="mode-tab${mode==='recurring'?' on':''}" onclick="setMatMode('recurring')">🔁 Récurrent</button>
           </div>
+          <div id="mode-unique" style="display:${mode==='unique'?'block':'none'}">
+            <div class="row2">
+              <div><div class="sub-lbl">Date</div><input type="date" class="fi" id="rem-date" value="${rem.date||''}" onchange="setMatDate(this.value)"></div>
+              <div><div class="sub-lbl">Heure</div><input type="time" class="fi" id="rem-time-u" value="${rem.time||'09:00'}" onchange="setMatTime(this.value)"></div>
+            </div>
+          </div>
+          <div id="mode-rec" style="display:${mode==='recurring'?'block':'none'}">
+            <div class="sub-lbl" style="margin-bottom:8px">Jours</div>
+            <div class="days-g" style="margin-bottom:12px">
+              ${DS.map((d,i)=>`<div class="days-btn${(rem.days||[]).includes(i)?' on':''}" onclick="togMatDay(${i})">${d.slice(0,2)}</div>`).join('')}
+            </div>
+            <div class="sub-lbl" style="margin-bottom:6px">Heure</div>
+            <input type="time" class="fi" id="rem-time-r" value="${rem.time||'09:00'}" onchange="setMatTime(this.value)">
+          </div>
+          <div style="margin-top:12px"><div class="sub-lbl" style="margin-bottom:7px">Son & vibration</div>
+            <div class="vib-row">
+              <div class="vib-btn${rem.vibrate!==false?' on':''}" onclick="setMatVib(true)">📳 Vibration</div>
+              <div class="vib-btn${rem.vibrate===false?' on':''}" onclick="setMatVib(false)">🔕 Silencieux</div>
+            </div></div>
         </div>
-      </div>
-    </div>
-    ${cal?`<div class="divl"></div><div class="info-row"><span>📅 Lié au calendrier : <strong>${esc(cal.t)}</strong></span></div>`:''}
+      </div></div>
+    ${cal?`<div class="divl"></div><div class="info-box"><span>📅 Lié au calendrier : <strong>${esc(cal.t)}</strong></span></div>`:''}
     <button class="btn-p" onclick="saveMat()">Enregistrer</button>
     ${T.id?`<button class="btn-d" onclick="delMat('${T.id}')">Supprimer</button>`:''}
     <button class="btn-s" onclick="closeSheet()">Annuler</button>
   </div>`);
   setTimeout(()=>{const el=document.getElementById('em-t');if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length);}},350);
 }
-
-function toggleMatRem(){
-  const btn=document.getElementById('rem-tog');
-  const opts=document.getElementById('rem-opts');
-  if(!opts)return;
-  const active=opts.style.display==='none';
-  opts.style.display=active?'block':'none';
-  if(btn){btn.textContent=active?'✓':'○';btn.style.background=active?'var(--acc)':'';btn.style.color=active?'#fff':'';btn.style.borderColor=active?'var(--acc)':'';}
-  if(!active){EM.rem=null;}
-  else{if(!EM.rem)EM.rem={time:'09:00',days:[0,1,2,3,4]};}
-  // re-render days
-  const dg=document.querySelector('.days-g');
-  if(dg&&EM.rem)dg.querySelectorAll('.days-btn').forEach((b,i)=>{b.classList.toggle('on',(EM.rem.days||[]).includes(i));});
+function togMatRem(){
+  const active=!!EM.rem;
+  EM.rem=active?null:{mode:'recurring',time:'09:00',days:[0,1,2,3,4],date:'',vibrate:true};
+  shMat();
 }
-function setMatRemTime(v){if(!EM.rem)EM.rem={time:v,days:[]};else EM.rem.time=v;}
-function toggleMatDay(i){
-  if(!EM.rem)EM.rem={time:'09:00',days:[]};
+function setMatMode(m){
+  if(!EM.rem)EM.rem={mode:m,time:'09:00',days:[0,1,2,3,4],date:'',vibrate:true};
+  else EM.rem.mode=m;
+  shMat();
+}
+function setMatDate(v){if(EM.rem)EM.rem.date=v;}
+function setMatTime(v){if(EM.rem)EM.rem.time=v;}
+function setMatVib(v){if(EM.rem){EM.rem.vibrate=v;shMat();}}
+function togMatDay(i){
+  if(!EM.rem)return;
   const days=EM.rem.days||[];
   const idx=days.indexOf(i);
   if(idx>=0)days.splice(idx,1);else days.push(i);
@@ -738,60 +802,50 @@ function toggleMatDay(i){
   document.querySelectorAll('.days-btn').forEach((b,j)=>b.classList.toggle('on',days.includes(j)));
 }
 function setMq(q){EM.q=q;shMat();}
-
 function saveMat(){
-  const T=EM;
-  const el=document.getElementById('em-t');
-  if(el)T.t=el.value.trim();
-  if(!T.t){toast('Titre manquant','Ajoute un nom.');return;}
-  // validate rem
-  if(T.rem&&(!T.rem.days||T.rem.days.length===0))T.rem=null;
-  if(T.id){
-    const i=st.matrix.findIndex(x=>x.id===T.id);
-    if(i>=0)st.matrix[i]={...T};
-    unschedTask('m_'+T.id);if(T.rem)schedMatrix(T);
-    if(T.cid){const ct=st.tasks.find(x=>x.id===T.cid);if(ct)ct.t=T.t;}
-  }else{
-    T.id=uid();st.matrix.push({...T});
-    if(T.rem)schedMatrix(T);
+  const T=EM;const el=document.getElementById('em-t');if(el)T.t=el.value.trim();
+  if(!T.t){toast('Titre requis','Donne un nom à la tâche.');return;}
+  // Read current time inputs
+  const tu=document.getElementById('rem-time-u'),tr=document.getElementById('rem-time-r');
+  if(T.rem){
+    if(T.rem.mode==='unique'){const d=document.getElementById('rem-date');if(d)T.rem.date=d.value;if(tu)T.rem.time=tu.value;}
+    else{if(tr)T.rem.time=tr.value;}
+    if(T.rem.mode==='unique'&&!T.rem.date){toast('Date requise','Sélectionne une date pour le rappel unique.');return;}
+    if(T.rem.mode==='recurring'&&(!T.rem.days||!T.rem.days.length)){T.rem=null;}
   }
-  save();closeSheet();R();
+  if(T.id){const i=st.matrix.findIndex(x=>x.id===T.id);if(i>=0)st.matrix[i]={...T};
+    if(T.cid){const ct=st.tasks.find(x=>x.id===T.cid);if(ct)ct.t=T.t;}}
+  else{T.id=uid();st.matrix.push({...T});}
+  save();schedAll();closeSheet();R();
 }
 function delMat(id){
   if(!confirm('Supprimer cette tâche ?'))return;
   const mt=st.matrix.find(x=>x.id===id);
   if(mt?.cid){const ct=st.tasks.find(x=>x.id===mt.cid);if(ct)ct.mid=null;}
-  unschedTask('m_'+id);
   st.matrix=st.matrix.filter(x=>x.id!==id);
-  save();closeSheet();R();
+  save();schedAll();closeSheet();R();
 }
 
-/* ══════════════════════════════════════════════════════════
-   NOTIF + PWA
-══════════════════════════════════════════════════════════ */
+/* ══ NOTIF BUTTON ════════════════════════════════════════════════════════════ */
 async function doNotif(){
   const ok=await askNotif();
-  if(ok){schedAll();toast('🔔 Rappels activés','Les rappels d\'aujourd\'hui sont programmés.');}
-  else toast('Notifications désactivées','Autorise dans Réglages → Safari → Notifications du site.');
-}
-function setupPWA(){
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="28" fill="%235B51F7"/><rect x="20" y="26" width="80" height="10" rx="5" fill="white" opacity=".95"/><rect x="20" y="44" width="58" height="8" rx="4" fill="white" opacity=".7"/><rect x="20" y="60" width="68" height="8" rx="4" fill="white" opacity=".7"/><rect x="20" y="76" width="48" height="8" rx="4" fill="white" opacity=".7"/></svg>`;
-  const m={name:'Mon Planning',short_name:'Planning',start_url:'.',display:'standalone',
-    background_color:'#F4F6FC',theme_color:'#5B51F7',
-    icons:[{src:'data:image/svg+xml,'+svg,sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]};
-  try{const b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
-    const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(b);document.head.appendChild(l);}catch(e){}
-  if('serviceWorker' in navigator){
-    const sw=`self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',()=>self.clients.claim());self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>new Response('Hors ligne',{headers:{'Content-Type':'text/plain'}}))));`;
-    try{const b=new Blob([sw],{type:'application/javascript'});
-      navigator.serviceWorker.register(URL.createObjectURL(b),{scope:'./'}).catch(()=>{});}catch(e){}
-  }
+  if(ok){schedAll();toast('🔔 Rappels activés','Tous les rappels sont programmés.');}
+  else toast('Notifications désactivées','Réglages → Safari → Mon site → Notifications.');
 }
 
-/* ══════════════════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════════════════ */
-setupPWA();load();askNotif();schedAll();R();
+/* ══ MANIFEST ════════════════════════════════════════════════════════════════ */
+function setupManifest(){
+  const l=document.createElement('link');l.rel='manifest';l.href='./manifest.json';
+  document.head.appendChild(l);
+}
+
+/* ══ INIT ════════════════════════════════════════════════════════════════════ */
+setupManifest();
+load();
+initSW().then(()=>{
+  askNotif().then(ok=>{if(ok)schedAll();});
+});
+R();
 </script>
 </body>
 </html>
